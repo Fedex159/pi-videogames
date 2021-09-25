@@ -87,7 +87,7 @@ async function gamesWithQuery(name, attributes) {
         return {
           id: game.id,
           name: game.name,
-          image: game.background_image,
+          image: game.isFromDB ? game.image : game.background_image,
           isFromDB: game.isFromDB,
         };
       });
@@ -155,6 +155,26 @@ async function loadGenres() {
   }
 }
 
+async function loadGame(info) {
+  if (info) {
+    try {
+      const game = await Videogame.create({
+        name: info.name,
+        description: info.description,
+        image: info.image,
+        released: info.released,
+        rating: info.rating,
+        platforms: info.platforms,
+      });
+      await game.addGenres(info.genres);
+      return true;
+    } catch (e) {
+      console.log("Error loadGame", e);
+    }
+  }
+  return false;
+}
+
 module.exports = {
   gamesFromAPI,
   gamesFromDB,
@@ -162,4 +182,5 @@ module.exports = {
   gameFromDB,
   gameFromAPI,
   loadGenres,
+  loadGame,
 };

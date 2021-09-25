@@ -13,10 +13,13 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     released: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING,
     },
     rating: {
       type: DataTypes.FLOAT,
+      validate: {
+        isFloat: true,
+      },
     },
     image: {
       type: DataTypes.STRING,
@@ -27,7 +30,6 @@ module.exports = (sequelize) => {
     },
     platforms: {
       type: DataTypes.JSONB,
-      allowNull: false,
     },
     isFromDB: {
       type: DataTypes.VIRTUAL,

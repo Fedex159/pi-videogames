@@ -6,6 +6,7 @@ const {
   gamesWithQuery,
   gameFromDB,
   gameFromAPI,
+  loadGame,
 } = require("../utils");
 
 const TOTAL = 100;
@@ -37,6 +38,15 @@ router.get("/:idVideogame", async (req, res) => {
       res.json(await gameFromAPI(idVideogame));
     }
   } catch (e) {
+    res.sendStatus(404);
+  }
+});
+
+router.post("/", (req, res) => {
+  const { name, description } = req.body;
+  if (name && description) {
+    res.json(loadGame(req.body) ? { created: true } : { created: false });
+  } else {
     res.sendStatus(404);
   }
 });
