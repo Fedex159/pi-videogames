@@ -42,11 +42,16 @@ router.get("/:idVideogame", async (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { name, description } = req.body;
-  if (name && description) {
-    res.json(loadGame(req.body) ? { created: true } : { created: false });
-  } else {
+  try {
+    if (name && description) {
+      const game = await loadGame(req.body);
+      res.json(game ? { created: true } : { created: false });
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (e) {
     res.sendStatus(404);
   }
 });
