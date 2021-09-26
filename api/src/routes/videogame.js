@@ -7,11 +7,13 @@ const {
   gameFromDB,
   gameFromAPI,
   loadGame,
+  validateParams,
+  validateUUID,
 } = require("../utils");
 
 const TOTAL = 100;
 const PAGE_SIZE = 20;
-const ATTRIBUTES = ["id", "name", "image", "isFromDB"];
+const ATTRIBUTES = ["id", "name", "image"];
 
 router.get("/", async (req, res) => {
   const { name } = req.query;
@@ -30,12 +32,13 @@ router.get("/", async (req, res) => {
 
 router.get("/:idVideogame", async (req, res) => {
   const { idVideogame } = req.params;
-  const { isFromDB } = req.query;
   try {
-    if (isFromDB === "true") {
+    if (validateUUID(idVideogame)) {
       res.json(await gameFromDB(idVideogame));
-    } else {
+    } else if (!isNaN(Number(idVideogame))) {
       res.json(await gameFromAPI(idVideogame));
+    } else {
+      res.json({});
     }
   } catch (e) {
     res.sendStatus(404);
@@ -43,13 +46,15 @@ router.get("/:idVideogame", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { name, description } = req.body;
   try {
-    if (name && description) {
+    if (await validateParams(req.body)) {
       const game = await loadGame(req.body);
       res.json(game ? { created: true } : { created: false });
     } else {
-      res.sendStatus(404);
+      res.status(400).json({
+        Error:
+          "Parameters required or Genres/Platforms/Image/Date/Rating not valid.",
+      });
     }
   } catch (e) {
     res.sendStatus(404);

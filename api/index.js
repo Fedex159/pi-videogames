@@ -19,7 +19,7 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require("./src/app.js");
 const { conn } = require("./src/db.js");
-const { loadGenres } = require("./src/utils");
+const { loadGenres, loadPlatforms } = require("./src/utils");
 
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {
@@ -28,5 +28,8 @@ conn.sync({ force: true }).then(() => {
     loadGenres()
       .then(() => console.log("Genres loaded in DB"))
       .catch((e) => console.log("Genres not loaded", e));
+    loadPlatforms()
+      .then(() => console.log("Platforms loaded in DB"))
+      .catch((e) => console.log("Platforms not loaded", e));
   });
 });
