@@ -293,22 +293,26 @@ function validateDate(str) {
 }
 
 async function validateParams(params) {
-  if (!params) return false;
-  const { name, description, genres, platforms, image, released, rating } =
-    params;
-  if (
-    typeof name === "string" &&
-    name.length > 0 &&
-    typeof description === "string" &&
-    description.length > 0 &&
-    (await validateGenres(genres)) &&
-    (await validatePlatforms(platforms)) &&
-    (!image || validateUrl(image)) &&
-    (!released || validateDate(released)) &&
-    !isNaN(Number(rating))
-  )
-    return true;
-  else return false;
+  try {
+    if (!params) return false;
+    const { name, description, genres, platforms, image, released, rating } =
+      params;
+    if (
+      typeof name === "string" &&
+      name.length > 0 &&
+      typeof description === "string" &&
+      description.length > 0 &&
+      (await validateGenres(genres)) &&
+      (await validatePlatforms(platforms)) &&
+      (!image || validateUrl(image)) &&
+      (!released || validateDate(released)) &&
+      !isNaN(Number(rating))
+    )
+      return true;
+    else return false;
+  } catch (e) {
+    console.log("Error validateParams", e);
+  }
 }
 
 function validateUUID(id) {
