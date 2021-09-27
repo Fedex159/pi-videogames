@@ -11,16 +11,17 @@ const {
   validateUUID,
 } = require("../utils");
 
-const TOTAL = 100;
-const PAGE_SIZE = 20;
+// const TOTAL = 100;
+// const PAGE_SIZE = 20;
 const ATTRIBUTES = ["id", "name", "image"];
 
 router.get("/", async (req, res) => {
   const { name } = req.query;
   try {
     if (!name) {
+      // const gamesAPI = await gamesFromAPI(TOTAL, PAGE_SIZE);
       const gamesDB = await gamesFromDB(name, ATTRIBUTES);
-      const gamesAPI = await gamesFromAPI(TOTAL, PAGE_SIZE);
+      const gamesAPI = await gamesFromAPI();
       res.json(gamesDB.concat(gamesAPI));
     } else {
       res.json(await gamesWithQuery(name, ATTRIBUTES));

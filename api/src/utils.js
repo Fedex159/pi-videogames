@@ -4,45 +4,88 @@ const { API_KEY } = process.env;
 const { Videogame, Genre, Platform } = require("./db");
 const axios = require("axios");
 
-async function gamesFromAPI(total, pageSize) {
-  try {
-    let promises = [];
-    let results = [];
-    // Armo un arreglo de promesas, para poder obtener 100 resultados
-    // ya que de una sola peticion no puedo.
-    for (let i = 1, flag = true; total > 0 && flag; i++) {
-      if (total - pageSize >= 0) {
-        total -= pageSize;
-      } else {
-        pageSize = total;
-        flag = false;
-      }
-      promises.push(
-        axios.get(
-          `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${pageSize}&page=${i}`
-        )
-      );
-    }
+// Esta funcion esta planteada para optimizar la obtencion de los datos de la api
+// de forma parelala, si se desea testear, comentar la funcion gamesFromAPI y
+// descomentar esta funcion, luego, seria necesario comentar la funcion gamesFromAPI
+// en el archivo videogame.js de la carpta route, y descomentar las lineas
+// comentadas.
 
-    await Promise.all(promises)
-      .then((values) => {
-        values.forEach((response) => {
-          response.data.results.forEach((game) => {
-            results.push({
-              id: game.id,
-              name: game.name,
-              image: game.background_image,
-              genres: game.genres.map((genre) => {
-                return {
-                  id: genre.id,
-                  name: genre.name,
-                };
-              }),
-            });
-          });
+// async function gamesFromAPI(total, pageSize) {
+//   try {
+//     let promises = [];
+//     let results = [];
+//     // Armo un arreglo de promesas, para poder obtener 100 resultados
+//     // ya que de una sola peticion no puedo.
+//     for (let i = 1, flag = true; total > 0 && flag; i++) {
+//       if (total - pageSize >= 0) {
+//         total -= pageSize;
+//       } else {
+//         pageSize = total;
+//         flag = false;
+//       }
+//       promises.push(
+//         axios.get(
+//           `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${pageSize}&page=${i}`
+//         )
+//       );
+//     }
+
+//     await Promise.all(promises)
+//       .then((values) => {
+//         values.forEach((response) => {
+//           response.data.results.forEach((game) => {
+//             results.push({
+//               id: game.id,
+//               name: game.name,
+//               image: game.background_image,
+//               genres: game.genres.map((genre) => {
+//                 return {
+//                   id: genre.id,
+//                   name: genre.name,
+//                 };
+//               }),
+//             });
+//           });
+//         });
+//       })
+//       .catch((e) => console.log(e));
+//     return results;
+//   } catch (e) {
+//     console.log("Error gamesFromAPI", e);
+//   }
+// }
+
+/* Esta funcion obtiene los datos de la api de manera secuencial, una vez obtenido
+ * los primeros 20, avanza a la sig pag, y asi hasta alcanzar los 100 requeridos.
+ * Es menos eficiente.
+ */
+async function gamesFromAPI() {
+  try {
+    let results = [],
+      response;
+    for (let i = 1; i <= 5; i++) {
+      if (i === 1) {
+        response = await axios.get(
+          `https://api.rawg.io/api/games?key=${API_KEY}`
+        );
+      } else {
+        // Avanzo a la sig pag para obtener los 20 resultados sig.
+        response = await axios.get(response.data.next);
+      }
+      response.data.results.forEach((game) => {
+        results.push({
+          id: game.id,
+          name: game.name,
+          image: game.background_image,
+          genres: game.genres.map((genre) => {
+            return {
+              id: genre.id,
+              name: genre.name,
+            };
+          }),
         });
-      })
-      .catch((e) => console.log(e));
+      });
+    }
     return results;
   } catch (e) {
     console.log("Error gamesFromAPI", e);
