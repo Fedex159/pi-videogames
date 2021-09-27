@@ -19,7 +19,7 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require("./src/app.js");
 const { conn } = require("./src/db.js");
-const { loadGenres, loadPlatforms } = require("./src/utils");
+const { loadGenres, loadPlatforms } = require("./src/utils/utils_loads");
 
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {

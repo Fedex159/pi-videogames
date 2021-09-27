@@ -1,8 +1,8 @@
 require("dotenv").config();
-const moment = require("moment");
 const { API_KEY } = process.env;
-const { Videogame, Genre, Platform } = require("./db");
+const { Videogame, Genre } = require("../db");
 const axios = require("axios");
+const { validateUUID } = require("./utils_validate");
 
 // Esta funcion esta planteada para optimizar la obtencion de los datos de la api
 // de forma parelala, si se desea testear, comentar la funcion gamesFromAPI y
@@ -136,9 +136,7 @@ async function gamesWithQuery(name, attributes) {
         return {
           id: game.id,
           name: game.name,
-          image: game.id.toString().includes("-")
-            ? game.image
-            : game.background_image,
+          image: validateUUID(game.id) ? game.image : game.background_image,
           genres: game.genres.map((genre) => {
             return {
               id: genre.id,
@@ -155,20 +153,12 @@ async function gamesWithQuery(name, attributes) {
 async function gameFromDB(id) {
   try {
     const game = await Videogame.findOne({
-      include: [
-        {
-          model: Platform,
-          through: {
-            attributes: [],
-          },
+      include: {
+        model: Genre,
+        through: {
+          attributes: [],
         },
-        {
-          model: Genre,
-          through: {
-            attributes: [],
-          },
-        },
-      ],
+      },
       where: {
         id: id,
       },
@@ -180,7 +170,7 @@ async function gameFromDB(id) {
         image: game.image,
         released: game.released,
         rating: game.rating,
-        platforms: game.platforms,
+        platforms: game.platforms.split("&&"),
         genres: game.genres,
       };
     } else {
@@ -204,10 +194,7 @@ async function gameFromAPI(id) {
         released: game.data.released,
         rating: game.data.rating,
         platforms: game.data.platforms.map((p) => {
-          return {
-            id: p.platform.id,
-            name: p.platform.name,
-          };
+          return p.platform.name;
         }),
         genres: game.data.genres.map((genre) => {
           return {
@@ -220,148 +207,9 @@ async function gameFromAPI(id) {
       return {};
     }
   } catch (e) {
-    console.log("Error gameFromAPI", e);
+    // console.log("Error gameFromAPI", e);
+    return {};
   }
-}
-
-async function loadGenres() {
-  try {
-    const genres = await axios.get(
-      `https://api.rawg.io/api/genres?key=${API_KEY}&`
-    );
-    if (genres.data) {
-      let promises = [];
-      genres.data.results.forEach((genre) => {
-        promises.push(
-          Genre.create({
-            id: genre.id,
-            name: genre.name,
-          })
-        );
-      });
-      await Promise.all(promises);
-    }
-  } catch (e) {
-    console.log("Error genresFromAPI", e);
-  }
-}
-
-async function loadPlatforms() {
-  try {
-    const platforms = await axios.get(
-      `https://api.rawg.io/api/platforms?key=${API_KEY}`
-    );
-    if (platforms.data) {
-      let promises = [];
-      platforms.data.results.forEach((p) => {
-        promises.push(
-          Platform.create({
-            id: p.id,
-            name: p.name,
-          })
-        );
-      });
-      await Promise.all(promises);
-    }
-  } catch (e) {
-    console.log("Error loadPlatforms", e);
-  }
-}
-
-async function loadGame(info) {
-  if (info) {
-    try {
-      const game = await Videogame.create({
-        name: info.name,
-        description: info.description,
-        image: info.image ? info.image : null,
-        released: info.released,
-        rating: info.rating ? Number(info.rating) : null,
-      });
-      await game.addGenres(info.genres);
-      await game.addPlatforms(info.platforms);
-      return true;
-    } catch (e) {
-      console.log("Error loadGame", e);
-    }
-  }
-  return false;
-}
-
-async function validateGenres(genres) {
-  try {
-    if (!Array.isArray(genres)) return false;
-    if (!genres.length) return false;
-    const genresDB = await Genre.findAll({
-      where: { id: genres },
-    });
-    return genresDB.length === genres.length;
-  } catch (e) {
-    console.log("Error validateGenres", e);
-  }
-}
-
-async function validatePlatforms(platforms) {
-  try {
-    if (!Array.isArray(platforms)) return false;
-    if (!platforms.length) return false;
-    const platformDB = await Platform.findAll({
-      where: { id: platforms },
-    });
-    return platformDB.length === platforms.length;
-  } catch (e) {
-    console.log("Error validatePlatforms", e);
-  }
-}
-
-function validateUrl(str) {
-  const pattern = new RegExp(
-    "^(https?:\\/\\/)?" + // protocol
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
-    "i"
-  ); // fragment locator
-  return !!pattern.test(str);
-}
-
-function validateDate(str) {
-  if (typeof str !== "string") return false;
-  return (
-    moment(str, "MM/DD/YYYY", true).isValid() ||
-    moment(str, "DD/MM/YYYY", true).isValid()
-  );
-}
-
-async function validateParams(params) {
-  try {
-    if (!params) return false;
-    const { name, description, genres, platforms, image, released, rating } =
-      params;
-    if (
-      typeof name === "string" &&
-      name.length > 0 &&
-      typeof description === "string" &&
-      description.length > 0 &&
-      (await validateGenres(genres)) &&
-      (await validatePlatforms(platforms)) &&
-      (!image || validateUrl(image)) &&
-      (!released || validateDate(released)) &&
-      !isNaN(Number(rating))
-    )
-      return true;
-    else return false;
-  } catch (e) {
-    console.log("Error validateParams", e);
-  }
-}
-
-function validateUUID(id) {
-  if (typeof id !== "string") return false;
-  const REGEX = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/g;
-  return REGEX.test(id);
 }
 
 module.exports = {
@@ -370,9 +218,4 @@ module.exports = {
   gamesWithQuery,
   gameFromDB,
   gameFromAPI,
-  loadGenres,
-  loadGame,
-  loadPlatforms,
-  validateParams,
-  validateUUID,
 };

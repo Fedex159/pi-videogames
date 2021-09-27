@@ -6,10 +6,9 @@ const {
   gamesWithQuery,
   gameFromDB,
   gameFromAPI,
-  loadGame,
-  validateParams,
-  validateUUID,
-} = require("../utils");
+} = require("../utils/utils_games");
+const { loadGame } = require("../utils/utils_loads");
+const { validateParams, validateUUID } = require("../utils/utils_validate");
 
 // const TOTAL = 100;
 // const PAGE_SIZE = 20;

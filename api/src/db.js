@@ -44,10 +44,12 @@ const { Videogame, Genre, Platform } = sequelize.models;
 Videogame.belongsToMany(Genre, { through: "game_genre" });
 Genre.belongsToMany(Videogame, { through: "game_genre" });
 
+// Alternativa a platforms como columna
+// ====================================
 // Relacion n <==> m entre videogame y platform, ya que un juego puede
 // pertener a varias plataformas, y una plataforma puede tener varios juegos.
-Videogame.belongsToMany(Platform, { through: "game_platform" });
-Platform.belongsToMany(Videogame, { through: "game_platform" });
+// Videogame.belongsToMany(Platform, { through: "game_platform" });
+// Platform.belongsToMany(Videogame, { through: "game_platform" });
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
