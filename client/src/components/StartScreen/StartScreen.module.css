@@ -1,0 +1,26 @@
+.container {
+  background-image: url("../../img/start-screen.png");
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  background-color: yellow;
+  color: black;
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 100px;
+  height: 50px;
+  font-size: large;
+  font-weight: bold;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: black;
+  color: yellow;
+}

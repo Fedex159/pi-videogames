@@ -1,9 +1,17 @@
-import './App.css';
+import "./App.css";
+import StartScreen from "./components/StartScreen/StartScreen";
+import { Route } from "react-router-dom";
+import Home from "./components/Home/Home";
 
 function App() {
   return (
     <div className="App">
-      <h1>Henry Videogames</h1>
+      <Route exact path="/">
+        <StartScreen />
+      </Route>
+      <Route exact path="/home">
+        <Home />
+      </Route>
     </div>
   );
 }
