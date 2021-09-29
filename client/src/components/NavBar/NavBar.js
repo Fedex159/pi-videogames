@@ -11,10 +11,10 @@ function NavBar(props) {
         <input name="search" placeholder="Nombre del juego" />
         <button>Buscar</button>
       </div>
-      <Link to="/home">
+      <Link className={s.link} to="/home">
         <h4>Home</h4>
       </Link>
-      <Link to="/create">
+      <Link className={s.link} to="/create">
         <h4>Create</h4>
       </Link>
     </div>

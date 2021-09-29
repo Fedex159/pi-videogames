@@ -4,8 +4,8 @@
   align-items: center;
   outline: 2px solid black;
   border-radius: 10px;
-  width: 200px;
-  height: 310px;
+  width: 1fr;
+  height: 380px;
   overflow: hidden;
 }
 
@@ -18,6 +18,13 @@
   margin-top: auto;
   margin-bottom: auto;
   font-size: 1.3rem;
+  font-weight: bold;
+}
+.container p {
+  background-color: #f1d11a;
+  padding: 3px;
+  border-radius: 5px;
+  outline: 1px solid black;
   font-weight: bold;
 }
 

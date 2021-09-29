@@ -3,6 +3,8 @@ import NavBar from "../NavBar/NavBar";
 import Games from "../Games/Games";
 import { useState } from "react";
 import { connect } from "react-redux";
+import Filters from "../Filters/Filters";
+import s from "./Home.module.css";
 
 function Home({ games }) {
   const [state, setState] = useState({ page: 0 });
@@ -23,34 +25,19 @@ function Home({ games }) {
       }
     }
   };
-  return (
-    <div>
-      <NavBar />
-      <select name="genre">
-        <option value="none" selected disabled hidden>
-          Genre
-        </option>
-        <option>Genre1</option>
-        <option>Genre2</option>
-      </select>
-      <select name="create">
-        <option value="none" selected disabled hidden>
-          Create by
-        </option>
-        <option>Own</option>
-        <option>Api</option>
-      </select>
 
-      <select name="order">
-        <option value="none" selected disabled hidden>
-          Order
-        </option>
-        <option>A-Z</option>
-        <option>Z-A</option>
-        <option>Rating</option>
-      </select>
-      <Games page={state.page} />
-      <div>
+  return (
+    <div className={s.container}>
+      <div className={s.navbar}>
+        <NavBar />
+      </div>
+      <div className={s.filters}>
+        <Filters />
+      </div>
+      <div className={s.games}>
+        <Games page={state.page} />
+      </div>
+      <div className={s.pages}>
         <button onClick={handleClick} name="pagedown">
           Ant
         </button>
@@ -59,6 +46,23 @@ function Home({ games }) {
           Sig
         </button>
       </div>
+      {/* <Genres />
+      <select name="create">
+        <option value="none" disabled hidden>
+          Create by
+        </option>
+        <option>Own</option>
+        <option>Api</option>
+      </select>
+
+      <select name="order">
+        <option value="none" disabled hidden>
+          Order
+        </option>
+        <option>A-Z</option>
+        <option>Z-A</option>
+        <option>Rating</option>
+      </select> */}
     </div>
   );
 }

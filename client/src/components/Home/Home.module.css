@@ -1,0 +1,31 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+  grid-template-rows: 0.01fr 1fr 50px;
+  grid-template-areas:
+    "navbar navbar"
+    "filters games"
+    "pages pages";
+  height: inherit;
+}
+
+.navbar {
+  grid-area: navbar;
+}
+
+.filters {
+  margin-top: 10px;
+  grid-area: filters;
+  background-color: black;
+  height: 100%;
+}
+
+.games {
+  grid-area: games;
+  padding: 20px;
+  height: 100%;
+}
+
+.pages {
+  grid-area: pages;
+}
