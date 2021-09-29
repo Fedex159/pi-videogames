@@ -5,7 +5,7 @@
   grid-template-areas:
     "navbar navbar"
     "filters games"
-    "pages pages";
+    "footer footer";
   height: inherit;
 }
 
@@ -26,6 +26,11 @@
   height: 100%;
 }
 
-.pages {
-  grid-area: pages;
+.footer {
+  grid-area: footer;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
 }

@@ -1,25 +1,37 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { filterGames } from "../../actions/index";
+import { filterGames, filterActive } from "../../actions";
+import { useDispatch, useSelector } from "react-redux";
+import { handleClickFilters } from "../../utils/utils";
 
 function Order() {
+  const active = useSelector((state) => state.filterActive);
   const dispatch = useDispatch();
 
   const handleClick = (e) => {
-    e.preventDefault();
-    console.log(e.target.value);
-    dispatch(filterGames(e.target.value));
+    handleClickFilters(e, active, dispatch, filterActive, filterGames);
   };
 
   return (
     <div>
-      <button onClick={handleClick} value="A-Z">
+      <button
+        className={active === "A-Z" && "active-button"}
+        onClick={handleClick}
+        value="A-Z"
+      >
         A-Z
       </button>
-      <button onClick={handleClick} value="Z-A">
+      <button
+        className={active === "Z-A" && "active-button"}
+        onClick={handleClick}
+        value="Z-A"
+      >
         Z-A
       </button>
-      <button onClick={handleClick} value="Rating">
+      <button
+        className={active === "Rating" && "active-button"}
+        onClick={handleClick}
+        value="Rating"
+      >
         Rating
       </button>
     </div>

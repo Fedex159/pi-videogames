@@ -1,21 +1,30 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { filterGames } from "../../actions/index";
+import { filterGames, filterActive } from "../../actions";
+import { useDispatch, useSelector } from "react-redux";
+import { handleClickFilters } from "../../utils/utils";
 
 function From() {
+  const active = useSelector((state) => state.filterActive);
   const dispatch = useDispatch();
 
   const handleClick = (e) => {
-    e.preventDefault();
-    console.log(e.target.value);
-    dispatch(filterGames(e.target.value));
+    handleClickFilters(e, active, dispatch, filterActive, filterGames);
   };
+
   return (
     <div>
-      <button onClick={handleClick} value="DB">
+      <button
+        className={active === "DB" && "active-button"}
+        onClick={handleClick}
+        value="DB"
+      >
         DB
       </button>
-      <button onClick={handleClick} value="API">
+      <button
+        className={active === "API" && "active-button"}
+        onClick={handleClick}
+        value="API"
+      >
         API
       </button>
     </div>

@@ -7,6 +7,8 @@ export const GET_GENRES = "GetGenres";
 // export const GET_PLATFORMS = "GetPlatforms";
 // export const GET_DETAIL = "GetDetail";
 export const FILTER_GAMES = "FilterGames";
+export const FILTER_ACTIVE = "FilterActive";
+export const SET_PAGE = "SetPage";
 
 export const getGames = async () => {
   try {
@@ -42,6 +44,20 @@ export const getGenres = async () => {
 export const filterGames = (payload) => {
   return {
     type: FILTER_GAMES,
+    payload: payload,
+  };
+};
+
+export const filterActive = (payload) => {
+  return {
+    type: FILTER_ACTIVE,
+    payload: payload,
+  };
+};
+
+export const setPage = (payload) => {
+  return {
+    type: SET_PAGE,
     payload: payload,
   };
 };

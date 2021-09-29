@@ -1,4 +1,11 @@
-import { GET_GAMES, GAMES_PAGE, GET_GENRES, FILTER_GAMES } from "../actions";
+import {
+  GET_GAMES,
+  GAMES_PAGE,
+  GET_GENRES,
+  FILTER_GAMES,
+  FILTER_ACTIVE,
+  SET_PAGE,
+} from "../actions";
 import { filterG } from "../utils/utils";
 
 const initialState = {
@@ -6,6 +13,8 @@ const initialState = {
   gamesPage: [],
   genres: [],
   gamesFilters: [],
+  page: 0,
+  filterActive: "",
 };
 
 const games = (state = initialState, action) => {
@@ -36,6 +45,18 @@ const games = (state = initialState, action) => {
         gamesFilters: filterG(state.games, action.payload),
       };
     }
+    case SET_PAGE: {
+      return {
+        ...state,
+        page: action.payload,
+      };
+    }
+    case FILTER_ACTIVE:
+      return {
+        ...state,
+        filterActive: action.payload,
+      };
+
     default:
       return state;
   }

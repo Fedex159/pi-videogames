@@ -17,7 +17,7 @@ function Games({
   useEffect(() => {
     (async () => {
       await getGames();
-      await filterGames("Rating");
+      await filterGames("");
       await gamesPage(page);
     })();
     // eslint-disable-next-line
@@ -55,6 +55,7 @@ const mapStateToProps = (state) => {
     games: state.gamesPage,
     gamesAll: state.games,
     gamesFilters: state.gamesFilters,
+    page: state.page,
   };
 };
 
