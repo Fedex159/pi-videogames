@@ -12,7 +12,7 @@ const { validateParams, validateUUID } = require("../utils/utils_validate");
 
 // const TOTAL = 100;
 // const PAGE_SIZE = 20;
-const ATTRIBUTES = ["id", "name", "image"];
+const ATTRIBUTES = ["id", "name", "image", "rating"];
 
 router.get("/", async (req, res) => {
   const { name } = req.query;

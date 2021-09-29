@@ -77,6 +77,7 @@ async function gamesFromAPI() {
           id: game.id,
           name: game.name,
           image: game.background_image,
+          rating: game.rating,
           genres: game.genres.map((genre) => {
             return {
               id: genre.id,
