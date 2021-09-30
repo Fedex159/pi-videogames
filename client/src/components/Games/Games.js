@@ -1,69 +1,51 @@
 import React from "react";
-import { connect } from "react-redux";
 import { useEffect } from "react";
-import { getGames, gamesPage, filterGames } from "../../actions";
+import {
+  getGames,
+  gamesPage,
+  setSearchState,
+  filterReset,
+} from "../../actions";
+import { useSelector, useDispatch } from "react-redux";
 import Game from "../Game/Game";
 import s from "./Games.module.css";
 
-function Games({
-  getGames,
-  gamesPage,
-  games,
-  page,
-  gamesAll,
-  gamesFilters,
-  filterGames,
-}) {
+function Games() {
+  const dispatch = useDispatch();
+  const pages = useSelector((state) => state.gamesPage);
+  const page = useSelector((state) => state.page);
+  const gamesFilters = useSelector((state) => state.gamesFilters);
+
   useEffect(() => {
     (async () => {
-      await getGames();
-      await filterGames("");
-      await gamesPage(page);
+      dispatch(setSearchState("off"));
+      dispatch(await getGames());
+      dispatch(filterReset());
+      dispatch(gamesPage(page));
     })();
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    try {
-      (async () => {
-        await gamesPage(page);
-      })();
-    } catch (e) {
-      console.log("Error useEffect [page]", e);
-    }
+    dispatch(gamesPage(page));
     // eslint-disable-next-line
   }, [page, gamesFilters]);
 
   return (
     <div className={s.container}>
-      {games.map((game) => (
-        <Game
-          key={`${game.id}_${game.name}`}
-          id={game.id}
-          name={game.name}
-          image={game.image}
-          rating={game.rating}
-          genres={game.genres}
-        />
-      ))}
+      {pages &&
+        pages.map((game) => (
+          <Game
+            key={`${game.id}_${game.name}`}
+            id={game.id}
+            name={game.name}
+            image={game.image}
+            rating={game.rating}
+            genres={game.genres}
+          />
+        ))}
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    games: state.gamesPage,
-    gamesAll: state.games,
-    gamesFilters: state.gamesFilters,
-    page: state.page,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getGames: async () => dispatch(await getGames()),
-    gamesPage: async (page) => dispatch(await gamesPage(page)),
-    filterGames: async (type) => dispatch(await filterGames(type)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Games);
+export default Games;

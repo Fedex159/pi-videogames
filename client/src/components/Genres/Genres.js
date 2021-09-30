@@ -1,14 +1,14 @@
 import React from "react";
-import { filterGames, filterActive } from "../../actions";
+import { filterGames, setFilterActive } from "../../actions";
 import { useDispatch, useSelector } from "react-redux";
 import { handleClickFilters } from "../../utils/utils";
 
 function Genres({ genres }) {
   const dispatch = useDispatch();
-  const active = useSelector((state) => state.filterActive);
+  const filter = useSelector((state) => state.filterActive);
 
   const handleClick = (e) => {
-    handleClickFilters(e, active, dispatch, filterActive, filterGames);
+    handleClickFilters(e, dispatch, filter, filterGames, setFilterActive);
   };
 
   return (
@@ -16,9 +16,15 @@ function Genres({ genres }) {
       {genres &&
         genres.map((g) => (
           <button
-            className={active === g.name && "active-button"}
+            className={filter.genres === g.name && "active-button"}
             onClick={handleClick}
+            name="genres"
             value={g.name}
+            style={
+              filter.genres !== "" && filter.genres !== g.name
+                ? { display: "none" }
+                : {}
+            }
             key={`${g.id}_${g.name}`}
           >
             {g.name}

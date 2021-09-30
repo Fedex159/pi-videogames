@@ -8,6 +8,7 @@ import s from "./Footer.module.css";
 function Footer() {
   const dispatch = useDispatch();
   const page = useSelector((state) => state.page);
+  const searchState = useSelector((state) => state.searchState);
   const gamesFilters = useSelector((state) => state.gamesFilters);
 
   useEffect(() => {
@@ -17,11 +18,11 @@ function Footer() {
   const handleClick = (e) => {
     e.preventDefault();
     if (e.target.value === "prev") {
-      if (validatePage(page, gamesFilters.length, "prev")) {
+      if (validatePage(page, gamesFilters.length, "prev", searchState)) {
         dispatch(setPage(page - 1));
       }
     } else if (e.target.value === "next") {
-      if (validatePage(page, gamesFilters.length, "next")) {
+      if (validatePage(page, gamesFilters.length, "next", searchState)) {
         dispatch(setPage(page + 1));
       }
     }

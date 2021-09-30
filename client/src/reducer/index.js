@@ -4,7 +4,10 @@ import {
   GET_GENRES,
   FILTER_GAMES,
   FILTER_ACTIVE,
+  FILTER_RESET,
   SET_PAGE,
+  SEARCH_GAME,
+  SET_SEARCH_STATE,
 } from "../actions";
 import { filterG } from "../utils/utils";
 
@@ -14,7 +17,8 @@ const initialState = {
   genres: [],
   gamesFilters: [],
   page: 0,
-  filterActive: "",
+  filterActive: { genres: "", from: "", order: "" },
+  searchState: "off",
 };
 
 const games = (state = initialState, action) => {
@@ -42,13 +46,7 @@ const games = (state = initialState, action) => {
     case FILTER_GAMES: {
       return {
         ...state,
-        gamesFilters: filterG(state.games, action.payload),
-      };
-    }
-    case SET_PAGE: {
-      return {
-        ...state,
-        page: action.payload,
+        gamesFilters: filterG(state.gamesFilters, action.payload),
       };
     }
     case FILTER_ACTIVE:
@@ -56,7 +54,30 @@ const games = (state = initialState, action) => {
         ...state,
         filterActive: action.payload,
       };
-
+    case FILTER_RESET:
+      return {
+        ...state,
+        gamesFilters: [...state.games],
+        filterActive: { genres: "", from: "", order: "" },
+      };
+    case SET_PAGE: {
+      return {
+        ...state,
+        page: action.payload,
+      };
+    }
+    case SEARCH_GAME:
+      return {
+        ...state,
+        gamesFilters: action.payload,
+        page: 0,
+        searchState: "on",
+      };
+    case SET_SEARCH_STATE:
+      return {
+        ...state,
+        searchState: action.payload,
+      };
     default:
       return state;
   }

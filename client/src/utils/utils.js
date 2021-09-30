@@ -4,11 +4,11 @@ function validateUUID(id) {
   return REGEX.test(id);
 }
 
-export function validatePage(page, length, action) {
-  if (action === "prev") {
+export function validatePage(page, length, action, search) {
+  if (action === "prev" && search === "off") {
     if (page > 0) return true;
     return false;
-  } else if (action === "next") {
+  } else if (action === "next" && search === "off") {
     if (page >= 0 && page * 15 + 15 <= length) return true;
     return false;
   }
@@ -27,8 +27,6 @@ function orderStr(a, b) {
 
 export function filterG(games, type) {
   switch (type) {
-    case "":
-      return games;
     case "A-Z":
       return [...games].sort((a, b) => {
         return orderStr(a.name, b.name);
@@ -39,7 +37,10 @@ export function filterG(games, type) {
       });
     case "Rating":
       return [...games].sort((a, b) => {
-        return orderStr(b.rating.toString(), a.rating.toString());
+        return orderStr(
+          Number(b.rating).toString(),
+          Number(a.rating).toString()
+        );
       });
     case "DB":
     case "API":
@@ -55,18 +56,27 @@ export function filterG(games, type) {
 
 export function handleClickFilters(
   event,
-  active,
   dispatch,
-  filterActive,
-  filterGames
+  filter,
+  filterGames,
+  setFilterActive
 ) {
-  event.preventDefault();
-  console.log(event.target.value);
-  if (active === event.target.value) {
-    dispatch(filterActive(""));
-    dispatch(filterGames(""));
+  if (event.target.name === "order") {
+    if (filter.order !== event.target.value) {
+      console.log(event.target.value);
+      dispatch(filterGames(event.target.value));
+      dispatch(setFilterActive({ ...filter, order: event.target.value }));
+    }
   } else {
-    dispatch(filterActive(event.target.value));
-    dispatch(filterGames(event.target.value));
+    if (!filter[event.target.name]) {
+      console.log(event.target.value);
+      dispatch(filterGames(event.target.value));
+      dispatch(
+        setFilterActive({
+          ...filter,
+          [event.target.name]: event.target.value,
+        })
+      );
+    }
   }
 }

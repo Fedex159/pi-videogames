@@ -9,10 +9,12 @@ function Game({ id, name, image, genres, rating }) {
       <div className={s.container}>
         <img src={image ? image : Template} alt="" />
         <span>{name}</span>
-        <p>Rating {rating}</p>
+        {rating && <p>Rating {rating}</p>}
+        {!rating && <p>No rating</p>}
         <ul>
           {genres &&
             genres.map((g) => <li key={`${name}_${g.id}`}>{g.name}</li>)}
+          {!genres.length && <li>No genres</li>}
         </ul>
       </div>
     </Link>
