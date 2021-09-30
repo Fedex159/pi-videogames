@@ -138,6 +138,7 @@ async function gamesWithQuery(name, attributes) {
           id: game.id,
           name: game.name,
           image: validateUUID(game.id) ? game.image : game.background_image,
+          rating: game.rating,
           genres: game.genres.map((genre) => {
             return {
               id: genre.id,
