@@ -1,3 +1,5 @@
+import axios from "axios";
+
 function validateUUID(id) {
   if (typeof id !== "string") return false;
   const REGEX = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/g;
@@ -15,7 +17,7 @@ export function validatePage(page, length, action, search) {
   return false;
 }
 
-function orderStr(a, b) {
+export function orderStr(a, b) {
   if (a.toLowerCase() > b.toLowerCase()) {
     return 1;
   }
@@ -78,5 +80,14 @@ export function handleClickFilters(
         })
       );
     }
+  }
+}
+
+export async function getGameDetails(id) {
+  try {
+    const response = await axios.get(`http://localhost:3001/videogames/${id}`);
+    return response.data;
+  } catch (e) {
+    console.log("Error getGameDetails", e);
   }
 }

@@ -2,17 +2,18 @@ import React from "react";
 import Logo from "../../img/logo.png";
 import s from "./NavBar.module.css";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchGame, setLoading } from "../../actions";
 import { setFilterActive } from "../../actions";
 
 function NavBar() {
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.loading);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     const name = e.target.search.value;
-    if (name) {
+    if (name && loading) {
       dispatch(setLoading(false));
       dispatch(await searchGame(name));
       dispatch(setFilterActive({ genres: "", from: "", order: "" }));

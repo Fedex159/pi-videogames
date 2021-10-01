@@ -9,6 +9,7 @@ import {
   SEARCH_GAME,
   SET_SEARCH_STATE,
   SET_LOADING,
+  RESET_STATE,
 } from "../actions";
 import { filterG } from "../utils/utils";
 
@@ -85,6 +86,8 @@ const games = (state = initialState, action) => {
         ...state,
         loading: action.payload,
       };
+    case RESET_STATE:
+      return initialState;
     default:
       return state;
   }

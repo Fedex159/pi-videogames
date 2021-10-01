@@ -5,12 +5,11 @@ import { Link } from "react-router-dom";
 
 function Game({ id, name, image, genres, rating }) {
   return (
-    <Link className={s.link} to={`/details/${id}`}>
+    <Link className={s.link} to={`/games/${id}`}>
       <div className={s.container}>
         <img src={image ? image : Template} alt="" />
         <span>{name}</span>
-        {rating && <p>Rating {rating}</p>}
-        {!rating && <p>No rating</p>}
+        <p>Rating {!isNaN(Number(rating)) ? Number(rating) : 0}</p>
         <ul>
           {genres &&
             genres.map((g) => <li key={`${name}_${g.id}`}>{g.name}</li>)}

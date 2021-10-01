@@ -25,8 +25,8 @@ function Filters() {
   }, []);
 
   const handleClick = (e) => {
+    e.preventDefault();
     if (e.target.name === "reset") {
-      e.preventDefault();
       dispatch(setSearchState("off"));
       dispatch(filterReset());
       setMenu(() => {
@@ -36,14 +36,14 @@ function Filters() {
           Order: false,
         };
       });
+    } else {
+      setMenu((prevState) => {
+        return {
+          ...prevState,
+          [e.target.innerHTML]: !prevState[e.target.innerHTML],
+        };
+      });
     }
-    e.preventDefault();
-    setMenu((prevState) => {
-      return {
-        ...prevState,
-        [e.target.innerHTML]: !prevState[e.target.innerHTML],
-      };
-    });
   };
   return (
     <div className={s.container}>

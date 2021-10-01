@@ -3,9 +3,9 @@ import { useEffect } from "react";
 import {
   getGames,
   gamesPage,
-  setSearchState,
   filterReset,
   setLoading,
+  resetState,
 } from "../../actions";
 import { useSelector, useDispatch } from "react-redux";
 import Game from "../Game/Game";
@@ -20,13 +20,16 @@ function Games() {
 
   useEffect(() => {
     (async () => {
-      dispatch(setLoading(false));
-      dispatch(setSearchState("off"));
       dispatch(await getGames());
       dispatch(filterReset());
       dispatch(gamesPage(page));
       dispatch(setLoading(true));
     })();
+
+    return () => {
+      // console.log("Saliendo...");
+      dispatch(resetState());
+    };
     // eslint-disable-next-line
   }, []);
 

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { orderStr } from "../utils/utils";
 
 // export const ADD_GAME = "AddGame";
 export const GET_GAMES = "GetGames";
@@ -13,6 +14,7 @@ export const SET_PAGE = "SetPage";
 export const SEARCH_GAME = "SearchGame";
 export const SET_SEARCH_STATE = "SetSearchState";
 export const SET_LOADING = "SetLoading";
+export const RESET_STATE = "ResetState";
 
 export const getGames = async () => {
   try {
@@ -36,9 +38,12 @@ export const gamesPage = (payload) => {
 export const getGenres = async () => {
   try {
     const response = await axios.get("http://localhost:3001/genres");
+    const genres = [...response.data].sort((a, b) => {
+      return orderStr(a.name, b.name);
+    });
     return {
       type: GET_GENRES,
-      payload: response.data,
+      payload: genres,
     };
   } catch (e) {
     console.log("Error getGenres", e);
@@ -97,5 +102,11 @@ export const setLoading = (payload) => {
   return {
     type: SET_LOADING,
     payload: payload,
+  };
+};
+
+export const resetState = () => {
+  return {
+    type: RESET_STATE,
   };
 };
