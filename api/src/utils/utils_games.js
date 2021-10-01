@@ -168,6 +168,7 @@ async function gameFromDB(id) {
     if (game) {
       return {
         id: game.id,
+        description: game.description,
         name: game.name,
         image: game.image,
         released: game.released,
@@ -192,6 +193,7 @@ async function gameFromAPI(id) {
       return {
         id: game.data.id,
         name: game.data.name,
+        description: game.data.description_raw,
         image: game.data.background_image,
         released: game.data.released,
         rating: game.data.rating,
