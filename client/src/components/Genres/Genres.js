@@ -16,7 +16,7 @@ function Genres({ genres }) {
       {genres &&
         genres.map((g) => (
           <button
-            className={filter.genres === g.name && "active-button"}
+            className={filter.genres === g.name ? "active-button" : ""}
             onClick={handleClick}
             name="genres"
             value={g.name}

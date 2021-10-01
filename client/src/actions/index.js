@@ -12,6 +12,7 @@ export const FILTER_RESET = "FilterReset";
 export const SET_PAGE = "SetPage";
 export const SEARCH_GAME = "SearchGame";
 export const SET_SEARCH_STATE = "SetSearchState";
+export const SET_LOADING = "SetLoading";
 
 export const getGames = async () => {
   try {
@@ -88,6 +89,13 @@ export const searchGame = async (name) => {
 export const setSearchState = (payload) => {
   return {
     type: SET_SEARCH_STATE,
+    payload: payload,
+  };
+};
+
+export const setLoading = (payload) => {
+  return {
+    type: SET_LOADING,
     payload: payload,
   };
 };

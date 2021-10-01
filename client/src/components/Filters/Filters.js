@@ -6,6 +6,7 @@ import Order from "../Order/Order";
 import { getGenres } from "../../actions";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setSearchState, filterReset } from "../../actions";
 
 function Filters() {
   const genres = useSelector((state) => state.genres);
@@ -24,6 +25,18 @@ function Filters() {
   }, []);
 
   const handleClick = (e) => {
+    if (e.target.name === "reset") {
+      e.preventDefault();
+      dispatch(setSearchState("off"));
+      dispatch(filterReset());
+      setMenu(() => {
+        return {
+          Genres: false,
+          From: false,
+          Order: false,
+        };
+      });
+    }
     e.preventDefault();
     setMenu((prevState) => {
       return {
@@ -51,6 +64,11 @@ function Filters() {
           Order
         </h3>
         <div>{menu.Order && <Order />}</div>
+      </div>
+      <div>
+        <button className={s.reset} onClick={handleClick} name="reset">
+          Reset
+        </button>
       </div>
     </div>
   );

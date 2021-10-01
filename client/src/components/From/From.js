@@ -14,7 +14,7 @@ function From() {
   return (
     <div>
       <button
-        className={filter.from === "DB" && "active-button"}
+        className={filter.from === "DB" ? "active-button" : ""}
         onClick={handleClick}
         name="from"
         value="DB"
@@ -25,7 +25,7 @@ function From() {
         DB
       </button>
       <button
-        className={filter.from === "API" && "active-button"}
+        className={filter.from === "API" ? "active-button" : ""}
         onClick={handleClick}
         name="from"
         value="API"

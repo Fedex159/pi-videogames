@@ -14,7 +14,7 @@ function Order() {
   return (
     <div>
       <button
-        className={filter.order === "A-Z" && "active-button"}
+        className={filter.order === "A-Z" ? "active-button" : ""}
         onClick={handleClick}
         name="order"
         value="A-Z"
@@ -22,7 +22,7 @@ function Order() {
         A-Z
       </button>
       <button
-        className={filter.order === "Z-A" && "active-button"}
+        className={filter.order === "Z-A" ? "active-button" : ""}
         onClick={handleClick}
         name="order"
         value="Z-A"
@@ -30,7 +30,7 @@ function Order() {
         Z-A
       </button>
       <button
-        className={filter.order === "Rating" && "active-button"}
+        className={filter.order === "Rating" ? "active-button" : ""}
         onClick={handleClick}
         name="order"
         value="Rating"

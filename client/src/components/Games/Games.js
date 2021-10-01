@@ -5,12 +5,14 @@ import {
   gamesPage,
   setSearchState,
   filterReset,
+  setLoading,
 } from "../../actions";
 import { useSelector, useDispatch } from "react-redux";
 import Game from "../Game/Game";
 import s from "./Games.module.css";
 
 function Games() {
+  const loading = useSelector((state) => state.loading);
   const dispatch = useDispatch();
   const pages = useSelector((state) => state.gamesPage);
   const page = useSelector((state) => state.page);
@@ -18,10 +20,12 @@ function Games() {
 
   useEffect(() => {
     (async () => {
+      dispatch(setLoading(false));
       dispatch(setSearchState("off"));
       dispatch(await getGames());
       dispatch(filterReset());
       dispatch(gamesPage(page));
+      dispatch(setLoading(true));
     })();
     // eslint-disable-next-line
   }, []);
@@ -33,7 +37,10 @@ function Games() {
 
   return (
     <div className={s.container}>
+      {!loading && <span>Cargando jueguitos...</span>}
+      {!pages.length && loading && <span>No hay jueguitos</span>}
       {pages &&
+        loading &&
         pages.map((game) => (
           <Game
             key={`${game.id}_${game.name}`}

@@ -8,6 +8,7 @@ import {
   SET_PAGE,
   SEARCH_GAME,
   SET_SEARCH_STATE,
+  SET_LOADING,
 } from "../actions";
 import { filterG } from "../utils/utils";
 
@@ -19,6 +20,7 @@ const initialState = {
   page: 0,
   filterActive: { genres: "", from: "", order: "" },
   searchState: "off",
+  loading: false,
 };
 
 const games = (state = initialState, action) => {
@@ -77,6 +79,11 @@ const games = (state = initialState, action) => {
       return {
         ...state,
         searchState: action.payload,
+      };
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: action.payload,
       };
     default:
       return state;

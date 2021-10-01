@@ -9,21 +9,6 @@
   height: inherit;
 }
 
-.reset button {
-  margin-top: 20px;
-  background-color: yellow;
-  border-color: yellow;
-  width: 60px;
-  height: 30px;
-  border-radius: 5px;
-}
-
-.reset button:hover {
-  font-weight: bold;
-  -webkit-box-shadow: 0px 0px 10px 5px #fff900;
-  box-shadow: 0px 0px 10px 5px #fff900;
-}
-
 .navbar {
   grid-area: navbar;
 }

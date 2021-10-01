@@ -3,7 +3,7 @@ import Logo from "../../img/logo.png";
 import s from "./NavBar.module.css";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { searchGame } from "../../actions";
+import { searchGame, setLoading } from "../../actions";
 import { setFilterActive } from "../../actions";
 
 function NavBar() {
@@ -13,8 +13,10 @@ function NavBar() {
     e.preventDefault();
     const name = e.target.search.value;
     if (name) {
+      dispatch(setLoading(false));
       dispatch(await searchGame(name));
       dispatch(setFilterActive({ genres: "", from: "", order: "" }));
+      dispatch(setLoading(true));
       e.target.search.value = "";
     }
   };
