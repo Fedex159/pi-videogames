@@ -26,12 +26,13 @@ function NavBar() {
     <div className={s.container}>
       <img src={Logo} alt="" />
       <form onSubmit={onSubmit} className={s.search}>
-        <input name="search" placeholder="Search ..." />
+        {!loading && <input disabled name="search" placeholder="Search ..." />}
+        {loading && <input name="search" placeholder="Search ..." />}
         <button type="submit">Buscar</button>
       </form>
-      <Link className={s.link} to="/home">
+      {/* <Link className={s.link} to="/home">
         <h4>Home</h4>
-      </Link>
+      </Link> */}
       <Link className={s.link} to="/create">
         <h4>Create</h4>
       </Link>

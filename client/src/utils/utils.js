@@ -11,7 +11,7 @@ export function validatePage(page, length, action, search) {
     if (page > 0) return true;
     return false;
   } else if (action === "next" && search === "off") {
-    if (page >= 0 && page * 15 + 15 <= length) return true;
+    if (page >= 0 && page * 15 + 15 < length) return true;
     return false;
   }
   return false;

@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { getGameDetails } from "../utils/utils";
 import s from "./GameDetails.module.css";
 import { Link } from "react-router-dom";
+import Loading from "../components/Loading/Loading";
+import NotGame from "../components/NotGame/NotGame";
 
 function GameDetails() {
   const { idVideoGame } = useParams();
@@ -14,6 +16,10 @@ function GameDetails() {
   });
   const { name, description, image, rating, released, genres, platforms, id } =
     state.gameDetails;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -70,9 +76,13 @@ function GameDetails() {
           </div>
         </div>
       ) : state.loading ? (
-        <span className={s.detail}>Cargando detalles</span>
+        <div className={s.loads}>
+          <Loading />
+        </div>
       ) : (
-        <span className={s.detail}>No hay juego</span>
+        <div className={s.loads}>
+          <NotGame />
+        </div>
       )}
     </div>
   );

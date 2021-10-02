@@ -1,12 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import {
-  getGames,
-  gamesPage,
-  filterReset,
-  setLoading,
-  resetState,
-} from "../../actions";
+import { gamesPage } from "../../actions";
 import { useSelector, useDispatch } from "react-redux";
 import Game from "../Game/Game";
 import s from "./Games.module.css";
@@ -19,29 +13,12 @@ function Games() {
   const gamesFilters = useSelector((state) => state.gamesFilters);
 
   useEffect(() => {
-    (async () => {
-      dispatch(await getGames());
-      dispatch(filterReset());
-      dispatch(gamesPage(page));
-      dispatch(setLoading(true));
-    })();
-
-    return () => {
-      // console.log("Saliendo...");
-      dispatch(resetState());
-    };
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
     dispatch(gamesPage(page));
     // eslint-disable-next-line
   }, [page, gamesFilters]);
 
   return (
     <div className={s.container}>
-      {!loading && <span>Cargando jueguitos...</span>}
-      {!pages.length && loading && <span>No hay jueguitos</span>}
       {pages &&
         loading &&
         pages.map((game) => (
