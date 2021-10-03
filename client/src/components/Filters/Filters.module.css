@@ -19,6 +19,7 @@
 }
 
 .container button {
+  /* background-color: var(--btn-background-color); */
   background-color: #f8f400;
   border-color: #f8f400;
   border-radius: 5px;

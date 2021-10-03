@@ -1,12 +1,12 @@
 import React from "react";
-import Template from "../img/game_template.png";
+import Template from "../../img/game_template.png";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { getGameDetails } from "../utils/utils";
+import { getGameDetails } from "../../utils/utils";
 import s from "./GameDetails.module.css";
 import { Link } from "react-router-dom";
-import Loading from "../components/Loading/Loading";
-import NotGame from "../components/NotGame/NotGame";
+import Loading from "../Loading/Loading";
+import NotGame from "../NotGame/NotGame";
 
 function GameDetails() {
   const { idVideoGame } = useParams();

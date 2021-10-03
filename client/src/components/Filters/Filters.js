@@ -10,6 +10,8 @@ import { setSearchState, filterReset } from "../../actions";
 
 function Filters() {
   const genres = useSelector((state) => state.genres);
+  const filterActive = useSelector((state) => state.filterActive);
+  const searchState = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
 
   const [menu, setMenu] = useState({
@@ -27,15 +29,22 @@ function Filters() {
   const handleClick = (e) => {
     e.preventDefault();
     if (e.target.name === "reset") {
-      dispatch(setSearchState("off"));
-      dispatch(filterReset());
-      setMenu(() => {
-        return {
-          Genres: false,
-          From: false,
-          Order: false,
-        };
-      });
+      if (
+        filterActive.genres ||
+        filterActive.from ||
+        filterActive.order ||
+        searchState === "on"
+      ) {
+        dispatch(setSearchState("off"));
+        dispatch(filterReset());
+        setMenu(() => {
+          return {
+            Genres: false,
+            From: false,
+            Order: false,
+          };
+        });
+      }
     } else {
       setMenu((prevState) => {
         return {

@@ -2,7 +2,7 @@ import "./App.css";
 import StartScreen from "./components/StartScreen/StartScreen";
 import { Route } from "react-router-dom";
 import Home from "./components/Home/Home";
-import GameDetails from "./GameDetails/GameDetails";
+import GameDetails from "./components/GameDetails/GameDetails";
 
 function App() {
   return (

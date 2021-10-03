@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { gamesPage } from "../../actions";
+import { gamesPage, setLoading } from "../../actions";
 import { useSelector, useDispatch } from "react-redux";
 import Game from "../Game/Game";
 import s from "./Games.module.css";
@@ -13,7 +13,9 @@ function Games() {
   const gamesFilters = useSelector((state) => state.gamesFilters);
 
   useEffect(() => {
+    dispatch(setLoading(false));
     dispatch(gamesPage(page));
+    dispatch(setLoading(true));
     // eslint-disable-next-line
   }, [page, gamesFilters]);
 
