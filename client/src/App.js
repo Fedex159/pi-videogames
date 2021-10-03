@@ -3,6 +3,7 @@ import StartScreen from "./components/StartScreen/StartScreen";
 import { Route } from "react-router-dom";
 import Home from "./components/Home/Home";
 import GameDetails from "./components/GameDetails/GameDetails";
+import Create from "./components/Create/Create";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
       </Route>
       <Route exact path="/games/:idVideoGame">
         <GameDetails />
+      </Route>
+      <Route exact path="/create">
+        <Create />
       </Route>
     </div>
   );

@@ -151,4 +151,13 @@
   .detail img {
     width: 90%;
   }
+  .lists {
+    display: block;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+
+  .list li {
+    min-width: 70%;
+  }
 }
