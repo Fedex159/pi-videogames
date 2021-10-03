@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
       const gamesAPI = await gamesFromAPI();
       res.json(gamesDB.concat(gamesAPI));
     } else {
-      res.json(await gamesWithQuery(name, ATTRIBUTES));
+      res.json(await gamesWithQuery(decodeURI(name), ATTRIBUTES));
     }
   } catch (e) {
     res.sendStatus(404);
