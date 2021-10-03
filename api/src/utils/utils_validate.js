@@ -46,8 +46,8 @@ function validateUrl(str) {
 function validateDate(str) {
   if (typeof str !== "string") return false;
   return (
-    moment(str, "MM/DD/YYYY", true).isValid() ||
-    moment(str, "DD/MM/YYYY", true).isValid()
+    moment(str, "YYYY-MM-DD", true).isValid() ||
+    moment(str, "YYYY-DD-MM", true).isValid()
   );
 }
 
