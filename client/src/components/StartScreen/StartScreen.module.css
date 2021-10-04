@@ -11,11 +11,11 @@
 }
 
 .btn {
-  background-color: yellow;
+  background-color: aqua;
   color: black;
   border: 2px solid black;
   border-radius: 5px;
-  width: 100px;
+  width: 150px;
   height: 50px;
   font-size: large;
   font-weight: bold;
@@ -24,5 +24,7 @@
 .btn:hover {
   cursor: pointer;
   background-color: black;
-  color: yellow;
+  color: aqua;
+  -webkit-box-shadow: 0px 0px 15px 10px aqua;
+  box-shadow: 0px 0px 15px 10px aqua;
 }

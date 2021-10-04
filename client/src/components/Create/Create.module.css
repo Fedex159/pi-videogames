@@ -5,8 +5,13 @@
   grid-template-areas:
     ". up ."
     ". form ."
-    ". . .";
+    ". footer .";
   background-color: black;
+  /* height: 100%; */
+}
+
+.footer {
+  grid-area: footer;
 }
 
 .btn {
@@ -72,6 +77,14 @@
   justify-content: center;
   align-items: center;
   width: 50%;
+}
+
+@media screen and (max-width: 470px) {
+  .info,
+  .genres,
+  .platforms {
+    width: 180px !important;
+  }
 }
 
 .container fieldset {
@@ -181,7 +194,7 @@ textarea:focus {
   box-shadow: 0px 0px 10px 1px #33ff00 !important;
 }
 
-.dangerShadow:focus {
+.dangerShadow {
   -webkit-box-shadow: 0px 0px 10px 1px #ff3c00 !important;
   box-shadow: 0px 0px 10px 1px #ff3c00 !important;
 }

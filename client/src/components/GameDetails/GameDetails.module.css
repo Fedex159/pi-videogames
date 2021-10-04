@@ -5,10 +5,14 @@
   grid-template-areas:
     ". up ."
     ". detail ."
-    ". . .";
+    ". footer .";
   background-color: black;
+  /* height: 100%; */
 }
 
+.footer {
+  grid-area: footer;
+}
 .buttons {
   grid-area: up;
   display: flex;

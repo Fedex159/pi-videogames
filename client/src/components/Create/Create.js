@@ -314,6 +314,7 @@ function Create() {
         </fieldset>
         {submit && <button type="submit">Create</button>}
       </form>
+      <div className={s.footer}></div>
     </div>
   );
 }

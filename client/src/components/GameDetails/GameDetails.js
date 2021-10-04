@@ -84,6 +84,7 @@ function GameDetails() {
           <NotGame />
         </div>
       )}
+      <div className={s.footer}></div>
     </div>
   );
 }
