@@ -18,18 +18,32 @@
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require("./src/app.js");
-const { conn } = require("./src/db.js");
+const { conn, Genre, Platform } = require("./src/db.js");
 const { loadGenres, loadPlatforms } = require("./src/utils/utils_loads");
 
 // Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
   server.listen(3001, () => {
     console.log("%s listening at 3001"); // eslint-disable-line no-console
-    loadGenres()
-      .then(() => console.log("Genres loaded in DB"))
-      .catch((e) => console.log("Genres not loaded", e));
-    loadPlatforms()
-      .then(() => console.log("Platforms loaded in DB"))
-      .catch((e) => console.log("Platforms not loaded", e));
+
+    Genre.findAndCountAll().then((data) => {
+      if (data.count > 0) {
+        console.log("Genres already exists");
+      } else {
+        loadGenres()
+          .then(() => console.log("Genres loaded in DB"))
+          .catch((e) => console.log("Genres not loaded", e));
+      }
+    });
+
+    Platform.findAndCountAll().then((data) => {
+      if (data.count > 0) {
+        console.log("Platforms already exists");
+      } else {
+        loadPlatforms()
+          .then(() => console.log("Platforms loaded in DB"))
+          .catch((e) => console.log("Platforms not loaded", e));
+      }
+    });
   });
 });
