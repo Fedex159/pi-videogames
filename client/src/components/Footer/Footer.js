@@ -18,7 +18,7 @@ function Footer() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    if (loading) {
+    if (!loading) {
       if (e.target.value === "prev") {
         if (validatePage(page, gamesFilters.length, "prev", searchState)) {
           dispatch(setPage(page - 1));

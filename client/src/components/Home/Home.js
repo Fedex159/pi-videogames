@@ -24,10 +24,11 @@ function Home() {
 
   useEffect(() => {
     (async () => {
+      dispatch(setLoading(true));
       dispatch(await getGames());
       dispatch(filterReset());
       dispatch(gamesPage(page));
-      dispatch(setLoading(true));
+      dispatch(setLoading(false));
     })();
 
     return () => {
@@ -42,10 +43,10 @@ function Home() {
       <div className={s.navbar}>
         <NavBar />
       </div>
-      <div className={s.filters}>{!loading ? null : <Filters />}</div>
+      <div className={s.filters}>{loading ? null : <Filters />}</div>
       <div className={s.games}>
-        {!loading ? <Loading /> : <Games />}
-        {!pages.length && loading && <NotGame />}
+        {loading ? <Loading /> : <Games />}
+        {!pages.length && !loading && <NotGame />}
       </div>
       <div className={s.footer}>
         <Footer />

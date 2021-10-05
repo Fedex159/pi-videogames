@@ -3,13 +3,13 @@ import s from "./Filters.module.css";
 import Genres from "../Genres/Genres";
 import From from "../From/From";
 import Order from "../Order/Order";
-import { getGenres } from "../../actions";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSearchState, filterReset } from "../../actions";
+import { getGenresFromDB } from "../../utils/utils";
 
 function Filters() {
-  const genres = useSelector((state) => state.genres);
+  const [genres, setGenres] = useState([]);
   const filterActive = useSelector((state) => state.filterActive);
   const searchState = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
@@ -21,7 +21,8 @@ function Filters() {
   });
   useEffect(() => {
     (async () => {
-      dispatch(await getGenres());
+      const response = await getGenresFromDB();
+      setGenres(() => response);
     })();
     // eslint-disable-next-line
   }, []);

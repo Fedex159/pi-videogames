@@ -7,7 +7,7 @@
     ". detail ."
     ". footer .";
   background-color: black;
-  /* height: 100%; */
+  min-height: 100vh;
 }
 
 .footer {
@@ -45,6 +45,8 @@
 
 .detail,
 .loads {
+  margin-top: auto;
+  margin-bottom: auto;
   grid-area: detail;
   background-color: yellow;
   border-radius: 10px;

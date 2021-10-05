@@ -13,11 +13,11 @@ function NavBar() {
   const onSubmit = async (e) => {
     e.preventDefault();
     const name = e.target.search.value;
-    if (name && loading) {
-      dispatch(setLoading(false));
+    if (name && !loading) {
+      dispatch(setLoading(true));
       dispatch(await searchGame(name));
       dispatch(setFilterActive({ genres: "", from: "", order: "" }));
-      dispatch(setLoading(true));
+      dispatch(setLoading(false));
       e.target.search.value = "";
     }
   };
@@ -26,13 +26,10 @@ function NavBar() {
     <div className={s.container}>
       <img src={Logo} alt="" />
       <form onSubmit={onSubmit} className={s.search}>
-        {!loading && <input disabled name="search" placeholder="Search ..." />}
-        {loading && <input name="search" placeholder="Search ..." />}
+        {loading && <input disabled name="search" placeholder="Search ..." />}
+        {!loading && <input name="search" placeholder="Search ..." />}
         <button type="submit">Buscar</button>
       </form>
-      {/* <Link className={s.link} to="/home">
-        <h4>Home</h4>
-      </Link> */}
       <Link className={s.link} to="/create">
         <h4>Create</h4>
       </Link>

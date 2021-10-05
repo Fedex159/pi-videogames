@@ -1,12 +1,7 @@
 import axios from "axios";
-import { orderStr } from "../utils/utils";
 
-// export const ADD_GAME = "AddGame";
 export const GET_GAMES = "GetGames";
 export const GAMES_PAGE = "GamesPage";
-export const GET_GENRES = "GetGenres";
-// export const GET_PLATFORMS = "GetPlatforms";
-// export const GET_DETAIL = "GetDetail";
 export const FILTER_GAMES = "FilterGames";
 export const FILTER_ACTIVE = "FilterActive";
 export const FILTER_RESET = "FilterReset";
@@ -33,21 +28,6 @@ export const gamesPage = (payload) => {
     type: GAMES_PAGE,
     payload: payload,
   };
-};
-
-export const getGenres = async () => {
-  try {
-    const response = await axios.get("http://localhost:3001/genres");
-    const genres = [...response.data].sort((a, b) => {
-      return orderStr(a.name, b.name);
-    });
-    return {
-      type: GET_GENRES,
-      payload: genres,
-    };
-  } catch (e) {
-    console.log("Error getGenres", e);
-  }
 };
 
 export const filterGames = (payload) => {

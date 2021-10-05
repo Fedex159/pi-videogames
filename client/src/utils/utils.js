@@ -126,110 +126,177 @@ export async function getPlatforms() {
   }
 }
 
-export function validateInputs(input) {
+export async function getGenresFromDB() {
+  try {
+    const response = await axios.get("http://localhost:3001/genres");
+    return [...response.data].sort((a, b) => {
+      return orderStr(a.name, b.name);
+    });
+  } catch (e) {
+    console.log("Error getGenresFromDB", e);
+    return [];
+  }
+}
+
+// export function validateInputs(input) {
+//   const errors = {};
+//   if (!input.name) {
+//     errors.name = "Name cannot be empty";
+//   } else if (typeof input.name !== "string") {
+//     errors.name = "Only valid string type";
+//   } else {
+//     errors.name = true;
+//   }
+
+//   if (!input.description) {
+//     errors.description = "Description cannot be empty";
+//   } else if (typeof input.description !== "string") {
+//     errors.description = "Only valid string type";
+//   } else if (input.description.length < 10) {
+//     errors.description = "It must have a minimum of 10 characters";
+//   } else {
+//     errors.description = true;
+//   }
+
+//   if (typeof input.image !== "string") {
+//     errors.image = "Only valid string type";
+//   } else if (!validateUrl(input.image) && input.image.length > 0) {
+//     errors.image = "Enter a valid url";
+//   } else {
+//     errors.image = true;
+//   }
+
+//   if (typeof input.rating !== "string") {
+//     errors.rating = "Only valid string type";
+//   } else if (isNaN(Number(input.rating))) {
+//     errors.rating = "Has to be a number";
+//   } else if (Number(input.rating) < 0 || Number(input.rating) > 5) {
+//     errors.rating = "It has to be between 0 and 5";
+//   } else {
+//     errors.rating = true;
+//   }
+
+//   if (typeof input.released !== "string") {
+//     errors.released = "Only valid string type";
+//   } else if (!validateDate(input.released) && input.released.length > 0) {
+//     errors.released = "Only valid date";
+//   } else {
+//     errors.released = true;
+//   }
+
+//   return errors;
+// }
+
+// export function validateGenres(input) {
+//   const errors = {};
+//   if (!Object.keys(input).length) {
+//     errors.genres = "Select at least 1 gender";
+//   } else {
+//     let keys = [];
+//     for (let key in input) {
+//       if (input[key]) {
+//         keys.push(key);
+//       }
+//     }
+//     if (!keys.length) {
+//       errors.genres = "Select at least 1 gender";
+//     } else {
+//       errors.genres = true;
+//     }
+//   }
+//   return errors;
+// }
+
+// export function validatePlatforms(input) {
+//   const errors = {};
+//   if (!Object.keys(input).length) {
+//     errors.platforms = "Select at least 1 platform";
+//   } else {
+//     let keys = [];
+//     for (let key in input) {
+//       if (input[key]) {
+//         keys.push(key);
+//       }
+//     }
+//     if (!keys.length) {
+//       errors.platforms = "Select at least 1 platform";
+//     } else {
+//       errors.platforms = true;
+//     }
+//   }
+//   return errors;
+// }
+
+// export function validateAll(errorsI, errorsG, errorsP) {
+//   let count = 0;
+//   for (let key in errorsI) {
+//     if (errorsI[key] === true) {
+//       count++;
+//     }
+//   }
+//   return count === 5 && errorsG.genres === true && errorsP.platforms === true;
+// }
+
+export async function genresToId(inputGenres) {
+  const ids = [];
+  const genres = await getGenresFromDB();
+  inputGenres.forEach((elem) => {
+    let index = genres.findIndex((g) => g.name === elem);
+    ids.push(genres[index].id);
+  });
+
+  return ids;
+}
+
+export function validateInputs(input, inputG, inputP) {
   const errors = {};
   if (!input.name) {
     errors.name = "Name cannot be empty";
-  } else if (typeof input.name !== "string") {
-    errors.name = "Only valid string type";
-  } else {
-    errors.name = true;
   }
 
   if (!input.description) {
     errors.description = "Description cannot be empty";
-  } else if (typeof input.description !== "string") {
-    errors.description = "Only valid string type";
   } else if (input.description.length < 10) {
     errors.description = "It must have a minimum of 10 characters";
-  } else {
-    errors.description = true;
   }
 
-  if (typeof input.image !== "string") {
-    errors.image = "Only valid string type";
-  } else if (!validateUrl(input.image) && input.image.length > 0) {
+  if (input.image && !validateUrl(input.image) && input.image.length > 0) {
     errors.image = "Enter a valid url";
-  } else {
-    errors.image = true;
   }
 
-  if (typeof input.rating !== "string") {
-    errors.rating = "Only valid string type";
-  } else if (isNaN(Number(input.rating))) {
+  if (isNaN(Number(input.rating))) {
     errors.rating = "Has to be a number";
   } else if (Number(input.rating) < 0 || Number(input.rating) > 5) {
     errors.rating = "It has to be between 0 and 5";
-  } else {
-    errors.rating = true;
   }
 
-  if (typeof input.released !== "string") {
-    errors.released = "Only valid string type";
-  } else if (!validateDate(input.released) && input.released.length > 0) {
+  if (
+    input.released &&
+    !validateDate(input.released) &&
+    input.released.length > 0
+  ) {
     errors.released = "Only valid date";
-  } else {
-    errors.released = true;
   }
-
-  return errors;
-}
-
-export function validateGenres(input) {
-  const errors = {};
-  if (!Object.keys(input).length) {
+  if (!inputG.length) {
     errors.genres = "Select at least 1 gender";
-  } else {
-    let keys = [];
-    for (let key in input) {
-      if (input[key]) {
-        keys.push(key);
-      }
-    }
-    if (!keys.length) {
-      errors.genres = "Select at least 1 gender";
-    } else {
-      errors.genres = true;
-    }
   }
-  return errors;
+  if (!inputP.length) {
+    errors.platform = "Select at least 1 platform";
+  }
+  return !Object.keys(errors).length ? { validate: true } : errors;
 }
 
-export function validatePlatforms(input) {
-  const errors = {};
-  if (!Object.keys(input).length) {
-    errors.platforms = "Select at least 1 platform";
-  } else {
-    let keys = [];
-    for (let key in input) {
-      if (input[key]) {
-        keys.push(key);
-      }
-    }
-    if (!keys.length) {
-      errors.platforms = "Select at least 1 platform";
-    } else {
-      errors.platforms = true;
+export async function addVideogame(body) {
+  if (Object.keys(body).length) {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/videogames",
+        body
+      );
+      return response.data;
+    } catch (e) {
+      console.log("Error addVideogame", e);
+      return {};
     }
   }
-  return errors;
-}
-
-export function validateAll(errorsI, errorsG, errorsP) {
-  let count = 0;
-  for (let key in errorsI) {
-    if (errorsI[key] === true) {
-      count++;
-    }
-  }
-  return count === 5 && errorsG.genres === true && errorsP.platforms === true;
-}
-
-export function genresToId(inputGenres, genres) {
-  const ids = [];
-  for (let key in inputGenres) {
-    let index = genres.findIndex((g) => g.name === key);
-    ids.push(genres[index].id);
-  }
-  return ids;
 }

@@ -13,16 +13,16 @@ function Games() {
   const gamesFilters = useSelector((state) => state.gamesFilters);
 
   useEffect(() => {
-    dispatch(setLoading(false));
-    dispatch(gamesPage(page));
     dispatch(setLoading(true));
+    dispatch(gamesPage(page));
+    dispatch(setLoading(false));
     // eslint-disable-next-line
   }, [page, gamesFilters]);
 
   return (
     <div className={s.container}>
       {pages &&
-        loading &&
+        !loading &&
         pages.map((game) => (
           <Game
             key={`${game.id}_${game.name}`}

@@ -1,24 +1,19 @@
 import React from "react";
-import axios from "axios";
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getGenres } from "../../actions";
+import Selected from "../Selected/Selected";
+import s from "./Create.module.css";
 import {
   getPlatforms,
+  getGenresFromDB,
   validateInputs,
-  validateGenres,
-  validatePlatforms,
-  validateAll,
+  addVideogame,
   genresToId,
 } from "../../utils/utils";
-import { useState } from "react";
-import s from "./Create.module.css";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function Create() {
-  const dispatch = useDispatch();
-  const genres = useSelector((state) => state.genres);
   const [platforms, setPlatforms] = useState([]);
+  const [genres, setGenres] = useState([]);
   const [input, setInput] = useState({
     name: "",
     description: "",
@@ -26,295 +21,207 @@ function Create() {
     rating: "",
     released: "",
   });
-  const [inputGenres, setInputGenres] = useState({});
-  const [inputPlatforms, setInputPlatforms] = useState({});
-  const [inputErrors, setInputErrors] = useState({});
-  const [inputErrorsGenres, setInputErrorsGenres] = useState({});
-  const [inputErrorsPlatforms, setInputErrorsPlatforms] = useState({});
-  const [submit, setSubmit] = useState(false);
+  const [inputPlatforms, setInputPlatforms] = useState([]);
+  const [inputGenres, setInputGenres] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [start, setStart] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     (async () => {
-      dispatch(await getGenres());
-      const data = await getPlatforms();
-      setPlatforms(() => data);
+      const responseP = await getPlatforms();
+      const responseG = await getGenresFromDB();
+      setPlatforms(() => responseP.map((e) => e.name));
+      setGenres(() => responseG.map((e) => e.name));
+      setStart(() => true);
     })();
-    // eslint-disable-next-line
   }, []);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const body = {
-      ...input,
-      platforms: Object.keys(inputPlatforms),
-      rating: Number(input.rating),
-      genres: genresToId(inputGenres, genres),
-    };
-    if (validateAll(inputErrors, inputErrorsGenres, inputErrorsPlatforms)) {
-      (async () => {
-        try {
-          const response = await axios.post(
-            "http://localhost:3001/videogames",
-            body
-          );
-          const input = {
-            name: "",
-            description: "",
-            image: "",
-            rating: "",
-            released: "",
-          };
-          setInput(() => input);
-          setInputGenres(() => ({}));
-          setInputPlatforms(() => ({}));
-          setInputErrors(() => ({}));
-          setInputErrorsGenres(() => ({}));
-          setInputErrorsPlatforms(() => ({}));
-          setSubmit(() => false);
-          document
-            .querySelectorAll("input[type=checkbox]")
-            .forEach((el) => (el.checked = false));
-          alert(`Game: ${response.data.created}`);
-          // window.location.reload();
-        } catch (e) {
-          console.log("Error post videogames", e);
-        }
-      })();
+  useEffect(() => {
+    if (start) {
+      setErrors(() => validateInputs(input, inputGenres, inputPlatforms));
     }
-  };
+    // eslint-disable-next-line
+  }, [inputGenres, inputPlatforms]);
 
-  const onChangeInputs = (e) => {
+  const onChange = (e) => {
     setInput((prev) => {
-      const input = { ...prev, [e.target.name]: e.target.value };
-      setInputErrors(() => {
-        const errorsI = validateInputs(input);
-        setSubmit(() =>
-          validateAll(errorsI, inputErrorsGenres, inputErrorsPlatforms)
-        );
-        return errorsI;
-      });
-
-      return input;
-    });
-    setInputErrorsGenres(() => validateGenres(inputGenres));
-    setInputErrorsPlatforms(() => validatePlatforms(inputPlatforms));
-  };
-
-  const onChangeInputGenres = (e) => {
-    setInputGenres((prev) => {
       const input = {
         ...prev,
-        [e.target.name]: !prev[e.target.name],
+        [e.target.name]: e.target.value,
       };
-      setInputErrorsGenres(() => {
-        const errorsG = validateGenres(input);
-        setSubmit(() =>
-          validateAll(inputErrors, errorsG, inputErrorsPlatforms)
-        );
-        return errorsG;
-      });
-
+      setErrors(() => validateInputs(input, inputGenres, inputPlatforms));
       return input;
     });
-    setInputErrors(() => validateInputs(input));
-    setInputErrorsPlatforms(() => validatePlatforms(inputPlatforms));
   };
 
-  const onChangeInputPlatforms = (e) => {
-    setInputPlatforms((prev) => {
-      const input = {
-        ...prev,
-        [e.target.name]: !prev[e.target.name],
+  const onSubmit = () => {
+    (async () => {
+      const genres = await genresToId(inputGenres);
+      const body = {
+        ...input,
+        rating: Number(input.rating),
+        platforms: inputPlatforms,
+        genres: genres,
       };
-      setInputErrorsPlatforms(() => {
-        const errorsP = validatePlatforms(input);
-        setSubmit(() => validateAll(inputErrors, inputErrorsGenres, errorsP));
-        return errorsP;
-      });
-
-      return input;
-    });
-    setInputErrors(() => validateInputs(input));
-    setInputErrorsGenres(() => validateGenres(inputGenres));
+      const reponse = await addVideogame(body);
+      setInput(() => ({
+        name: "",
+        description: "",
+        image: "",
+        rating: "",
+        released: "",
+      }));
+      setStart(() => false);
+      setInputGenres(() => []);
+      setInputPlatforms(() => []);
+      setStart(() => true);
+      alert(reponse.created);
+    })();
   };
 
   return (
     <div className={s.container}>
-      <div className={s.btn}>
-        <Link className={s.link} to="/home">
-          <div>Home</div>
-        </Link>
-      </div>
-      <form onSubmit={onSubmit}>
-        <fieldset className={s.info}>
-          {inputErrors.name !== undefined && inputErrors.name !== true ? (
-            <label className={s.danger}>{inputErrors.name}</label>
-          ) : (
-            <label>Name</label>
-          )}
-          <input
-            className={
-              inputErrors.name !== undefined && inputErrors.name === true
-                ? s.valid
-                : inputErrors.name === undefined
-                ? null
-                : s.dangerShadow
-            }
-            onChange={onChangeInputs}
-            value={input.name}
-            type="text"
-            name="name"
-            placeholder="Name"
-          />
-
-          {inputErrors.description !== undefined &&
-          inputErrors.description !== true ? (
-            <label className={s.danger}>{inputErrors.description}</label>
-          ) : (
-            <label>Description</label>
-          )}
-          <textarea
-            className={
-              inputErrors.description !== undefined &&
-              inputErrors.description === true
-                ? s.valid
-                : inputErrors.description === undefined
-                ? null
-                : s.dangerShadow
-            }
-            onChange={onChangeInputs}
-            value={input.description}
-            name="description"
-            placeholder="Description"
-            rows="5"
-          />
-          {inputErrors.image !== undefined && inputErrors.image !== true ? (
-            <label className={s.danger}>{inputErrors.image}</label>
-          ) : (
-            <label>Image URL</label>
-          )}
-          <input
-            className={
-              inputErrors.image !== undefined && inputErrors.image === true
-                ? s.valid
-                : inputErrors.image === undefined
-                ? null
-                : s.dangerShadow
-            }
-            onChange={onChangeInputs}
-            value={input.image}
-            type="text"
-            name="image"
-            placeholder="http://url-image"
-          />
-        </fieldset>
-        <fieldset className={s.numbers}>
-          <fieldset className={s.fieldDiv}>
-            {inputErrors.rating !== undefined && inputErrors.rating !== true ? (
-              <label className={s.danger}>{inputErrors.rating}</label>
-            ) : (
-              <label>Rating</label>
-            )}
+      <Link className={s.btnHome} to="/home">
+        <div>Home</div>
+      </Link>
+      <div className={s.form}>
+        <div className={s.info}>
+          <div className={`${s.name} ${errors.name ? s.dangerText : ""}`}>
+            <span>{!errors.name ? "Name" : errors.name}</span>
             <input
-              className={
-                inputErrors.rating !== undefined && inputErrors.rating === true
-                  ? s.valid
-                  : inputErrors.rating === undefined
-                  ? null
-                  : s.dangerShadow
-              }
-              onChange={onChangeInputs}
-              value={input.rating}
+              className={`${s.input} ${
+                errors.name ? s.dangerShadow : !input.name ? "" : s.validShadow
+              }`}
+              onChange={onChange}
+              type="text"
+              value={input.name}
+              name="name"
+              placeholder="Name"
+            />
+          </div>
+
+          <div
+            className={`${s.description} ${
+              errors.description ? s.dangerText : ""
+            }`}
+          >
+            <span>
+              {!errors.description ? "Description" : errors.description}
+            </span>
+            <textarea
+              className={`${s.input} ${
+                errors.description
+                  ? s.dangerShadow
+                  : !input.description
+                  ? ""
+                  : s.validShadow
+              }`}
+              onChange={onChange}
+              type="text"
+              rows="5"
+              value={input.description}
+              name="description"
+              placeholder="Description"
+            />
+          </div>
+
+          <div className={`${s.image} ${errors.image ? s.dangerText : ""}`}>
+            <span>{!errors.image ? "Image" : errors.image}</span>
+            <input
+              className={`${s.input} ${
+                errors.image ? s.dangerShadow : s.validShadow
+              }`}
+              onChange={onChange}
+              type="text"
+              value={input.image}
+              name="image"
+              placeholder="http://url-image"
+            />
+          </div>
+        </div>
+
+        <div className={s.numbers}>
+          <div className={`${s.number} ${errors.rating ? s.dangerText : ""}`}>
+            <span>{!errors.rating ? "Rating" : errors.rating}</span>
+            <input
+              className={`${s.input} ${
+                errors.rating ? s.dangerShadow : s.validShadow
+              }`}
+              onChange={onChange}
               type="number"
-              name="rating"
-              placeholder="Rating"
-              step="0.01"
               min="0"
               max="5"
+              step="0.01"
+              value={input.rating}
+              name="rating"
+              placeholder="Rating"
             />
-          </fieldset>
-          <fieldset className={s.fieldDiv}>
-            {inputErrors.released !== undefined &&
-            inputErrors.released !== true ? (
-              <label className={s.danger}>{inputErrors.released}</label>
-            ) : (
-              <label>Released</label>
-            )}
+          </div>
+
+          <div className={`${s.number} ${errors.released ? s.dangerText : ""}`}>
+            <span>{!errors.released ? "Released" : errors.released}</span>
             <input
-              className={
-                inputErrors.released !== undefined &&
-                inputErrors.released === true
-                  ? s.valid
-                  : inputErrors.released === undefined
-                  ? null
-                  : s.dangerShadow
+              style={
+                !input.released
+                  ? {
+                      color: "yellow",
+                      fontWeight: "100",
+                      fontStyle: "oblique",
+                    }
+                  : null
               }
-              onChange={onChangeInputs}
-              value={input.released}
+              className={`${s.input} ${
+                errors.released ? s.dangerShadow : s.validShadow
+              }`}
+              onChange={onChange}
               type="date"
+              value={input.released}
               name="released"
             />
-          </fieldset>
-        </fieldset>
-        {inputErrorsGenres.genres !== undefined &&
-        inputErrorsGenres.genres !== true ? (
-          <label className={s.danger}>{inputErrorsGenres.genres}</label>
-        ) : (
-          <label>Genres</label>
-        )}
-        <fieldset
-          className={`${s.genres} ${
-            inputErrorsGenres.genres !== undefined &&
-            inputErrorsGenres.genres === true
-              ? s.valid
-              : inputErrorsGenres.genres === undefined
-              ? null
-              : s.dangerShadowCheckbox
-          }`}
-        >
-          {genres &&
-            genres.map((g) => (
-              <label key={`${g.id}-${g.name}`}>
-                <input
-                  onChange={onChangeInputGenres}
-                  type="checkbox"
-                  name={g.name}
-                />
-                {g.name}
-              </label>
-            ))}
-        </fieldset>
-        {inputErrorsPlatforms.platforms !== undefined &&
-        inputErrorsPlatforms.platforms !== true ? (
-          <label className={s.danger}>{inputErrorsPlatforms.platforms}</label>
-        ) : (
-          <label>Platforms</label>
-        )}
-        <fieldset
-          className={`${s.platforms} ${
-            inputErrorsPlatforms.platforms !== undefined &&
-            inputErrorsPlatforms.platforms === true
-              ? s.valid
-              : inputErrorsPlatforms.platforms === undefined
-              ? null
-              : s.dangerShadowCheckbox
-          }`}
-        >
-          {platforms &&
-            platforms.map((p, i) => (
-              <label key={`${p.name}_${i}`}>
-                <input
-                  onChange={onChangeInputPlatforms}
-                  type="checkbox"
-                  name={p.name}
-                />
-                {p.name}
-              </label>
-            ))}
-        </fieldset>
-        {submit && <button type="submit">Create</button>}
-      </form>
-      <div className={s.footer}></div>
+          </div>
+        </div>
+        <div className={s.selecteds}>
+          <div
+            className={`${s.select} ${errors.genres ? s.dangerText : ""} ${
+              errors.genres
+                ? s.dangerShadow
+                : !inputGenres.length
+                ? ""
+                : s.validShadow
+            }`}
+          >
+            <span>{!errors.genres ? "Genres" : errors.genres}</span>
+            <Selected
+              list={genres}
+              items={inputGenres}
+              setItems={setInputGenres}
+            />
+          </div>
+          <div
+            className={`${s.select} ${errors.platform ? s.dangerText : ""} ${
+              errors.platform
+                ? s.dangerShadow
+                : !inputPlatforms.length
+                ? ""
+                : s.validShadow
+            }`}
+          >
+            <span>{!errors.platform ? "Platforms" : errors.platform}</span>
+            <Selected
+              list={platforms}
+              items={inputPlatforms}
+              setItems={setInputPlatforms}
+            />
+          </div>
+        </div>
+
+        {errors.validate ? (
+          <button className={s.btnSubmit} onClick={onSubmit}>
+            Create
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }
