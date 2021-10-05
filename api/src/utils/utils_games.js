@@ -3,7 +3,7 @@ const { API_KEY } = process.env;
 const { Videogame, Genre } = require("../db");
 const axios = require("axios");
 const { validateUUID } = require("./utils_validate");
-const sequelize = require("sequelize");
+const { Op } = require("sequelize");
 
 // Esta funcion esta planteada para optimizar la obtencion de los datos de la api
 // de forma parelala, si se desea testear, comentar la funcion gamesFromAPI y
@@ -97,14 +97,16 @@ async function gamesFromAPI() {
 
 async function gamesFromDB(name, attributes, limit = 100) {
   try {
+    // sequelize.where(
+    //   sequelize.fn("LOWER", sequelize.col("name")),
+    //   "LIKE",
+    //   "%" + name.toLowerCase() + "%"
+    // )
     return await Videogame.findAll({
       attributes: attributes,
+
       where: name && {
-        name: sequelize.where(
-          sequelize.fn("LOWER", sequelize.col("name")),
-          "LIKE",
-          "%" + name.toLowerCase() + "%"
-        ),
+        name: { [Op.iLike]: `%${name}%` },
       },
       limit: limit,
       include: {
