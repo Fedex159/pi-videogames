@@ -157,6 +157,22 @@
   .detail img {
     width: 90%;
   }
+  .description {
+    max-height: 40vh;
+    overflow-y: scroll;
+    box-sizing: border-box;
+  }
+
+  .description::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+  }
+
+  .description {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
   .lists {
     display: block;
     padding-bottom: 5px;

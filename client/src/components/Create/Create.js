@@ -10,6 +10,7 @@ import {
 } from "../../utils/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Popup from "../Pop-up/Popup";
 
 function Create() {
   const [platforms, setPlatforms] = useState([]);
@@ -25,6 +26,8 @@ function Create() {
   const [inputGenres, setInputGenres] = useState([]);
   const [errors, setErrors] = useState({});
   const [start, setStart] = useState(false);
+  const [popState, setPopupState] = useState(false);
+  const [popupTitle, setPopupTitle] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,14 +60,14 @@ function Create() {
 
   const onSubmit = () => {
     (async () => {
-      const genres = await genresToId(inputGenres);
+      const genresID = await genresToId(inputGenres);
       const body = {
         ...input,
         rating: Number(input.rating),
         platforms: inputPlatforms,
-        genres: genres,
+        genres: genresID,
       };
-      const reponse = await addVideogame(body);
+      const response = await addVideogame(body);
       setInput(() => ({
         name: "",
         description: "",
@@ -75,13 +78,20 @@ function Create() {
       setStart(() => false);
       setInputGenres(() => []);
       setInputPlatforms(() => []);
+      setErrors(() => ({}));
       setStart(() => true);
-      alert(reponse.created);
+      setPopupTitle(() => response.created);
+      setPopupState(() => true);
     })();
   };
 
   return (
     <div className={s.container}>
+      {popState ? (
+        <div className={s.popup}>
+          <Popup title={popupTitle} setPopupState={setPopupState} />
+        </div>
+      ) : null}
       <Link className={s.btnHome} to="/home">
         <div>Home</div>
       </Link>
@@ -130,7 +140,11 @@ function Create() {
             <span>{!errors.image ? "Image" : errors.image}</span>
             <input
               className={`${s.input} ${
-                errors.image ? s.dangerShadow : s.validShadow
+                errors.image
+                  ? s.dangerShadow
+                  : Object.keys(errors).length === 0
+                  ? ""
+                  : s.validShadow
               }`}
               onChange={onChange}
               type="text"
@@ -146,7 +160,11 @@ function Create() {
             <span>{!errors.rating ? "Rating" : errors.rating}</span>
             <input
               className={`${s.input} ${
-                errors.rating ? s.dangerShadow : s.validShadow
+                errors.rating
+                  ? s.dangerShadow
+                  : Object.keys(errors).length === 0
+                  ? ""
+                  : s.validShadow
               }`}
               onChange={onChange}
               type="number"
@@ -172,7 +190,11 @@ function Create() {
                   : null
               }
               className={`${s.input} ${
-                errors.released ? s.dangerShadow : s.validShadow
+                errors.released
+                  ? s.dangerShadow
+                  : Object.keys(errors).length === 0
+                  ? ""
+                  : s.validShadow
               }`}
               onChange={onChange}
               type="date"

@@ -76,7 +76,6 @@ function Selected({ list, items, setItems }) {
             value={searchValue}
             type="text"
             name="selected"
-            autoFocus={true}
           />
           <div className={s.btnClean}>
             <button onClick={onClickClean}>x</button>

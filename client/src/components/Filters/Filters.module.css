@@ -19,7 +19,6 @@
 }
 
 .container button {
-  /* background-color: var(--btn-background-color); */
   background-color: #f8f400;
   border-color: #f8f400;
   border-radius: 5px;
@@ -33,6 +32,7 @@
   font-weight: bold;
   -webkit-box-shadow: 0px 0px 10px 5px #fff900;
   box-shadow: 0px 0px 10px 5px #fff900;
+  transition: 0.1s ease;
 }
 
 .reset {
