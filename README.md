@@ -4,172 +4,103 @@
 
 # Individual Project - Henry Videogames
 
-<p align="right">
-  <img height="200" src="./videogame.png" />
+<p align="center">
+  <img style="border-radius: 5px; -webkit-box-shadow: 0px 0px 7px 0px #000000;
+  box-shadow: 0px 0px 7px 0px #000000;" height="250" src="./imgs/start-screen.png" />
 </p>
 
-## Objetivos del Proyecto
+## Descripción
 
-- Construir una App utlizando React, Redux, Node y Sequelize.
-- Afirmar y conectar los conceptos aprendidos en la carrera.
-- Aprender mejores prácticas.
-- Aprender y practicar el workflow de GIT.
-- Usar y practicar testing.
+<p>Este es el proyecto individual realizado durante la etapa de Labs de <strong>Henry.</strong> Es una SPA (Single Page Application), en la que se utiliza React, Redux, Express, una base de datos con ProgreSQL y una API (<a href="https://rawg.io/">rawg</a>) para obtener la info en la web principalmente. En la app se pueden hacer consultas a la API externa y a la DB, crear videogames, filtrar por género y pertenencia, tambien se le puede aplicar un ordenamiento, tanto alfabético como por rating.</p>
 
-## Horarios y Fechas
+## Dependencias y programas usados
 
-El proyecto tendrá una duración máxima de tres semanas. En el caso de que completan todas las tareas antes de dicho lapso podrán avisar a su Instructor para coordinar una fecha de presentación del trabajo (DEMO).
+<p>Durante el proyecto, se usaron las sigs tecnologías:</p>
 
-## Comenzando
+- Node v12.21.0
+- Npm v7.20.3
+- PSQL v13.4
+- Express v4.17.1
+- Sequelize v6.3.5
+- Firefox 93.0
+- Brave 1.30.87
 
- 1. Forkear el repositorio para tener una copia del mismo en sus cuentas
- 2. Clonar el repositorio en sus computadoras para comenzar a trabajar
+<p>Y muchas más dependencias, consultar los package.json de la ruta <strong>/api</strong> y <strong>/client.</strong> </p>
 
-Tendrán un `boilerplate` con la estructura general tanto del servidor como de cliente.
+## Instrucciones para utilizar el proyecto
 
-__IMPORTANTE:__ Es necesario contar minimamente con la última versión estable de Node y NPM. Asegurarse de contar con ella para poder instalar correctamente las dependecias necesarias para correr el proyecto.
+- Clonar o forkear el repositorio
+- Obtener una api-key desde <a href="https://rawg.io/">rawg</a>
 
-Actualmente las versiónes necesarias son:
+### <u>Configurando la DB</u>
 
- * __Node__: 12.18.3 o mayor
- * __NPM__: 6.14.16 o mayor
-
-Para verificar que versión tienen instalada:
-
-> node -v
->
-> npm -v
-
-## BoilerPlate
-
-El boilerplate cuenta con dos carpetas: `api` y `client`. En estas carpetas estará el código del back-end y el front-end respectivamente.
-
-En `api` crear un archivo llamado: `.env` que tenga la siguiente forma:
+Crear un archivo <strong>.env</strong> en la carpeta <strong>/api</strong> con los sigs parámetros:
 
 ```
 DB_USER=usuariodepostgres
 DB_PASSWORD=passwordDePostgres
 DB_HOST=localhost
+API_KEY=api-key
 ```
 
-Reemplazar `usuariodepostgres` y `passwordDePostgres` con tus propias credenciales para conectarte a postgres. Este archivo va ser ignorado en la subida a github, ya que contiene información sensible (las credenciales).
+Reemplazar usuariodepostgres y passwordDePostgres con tus propias credenciales para conectarte a postgres, y colocar en API_KEY la api creada anteriormente.
 
-Adicionalmente será necesario que creen desde psql una base de datos llamada `videogames`
+Debe ser necesario crear la DATABASE <strong>Videogames</strong> en ProgreSQL.
 
-El contenido de `client` fue creado usando: Create React App.
+Una vez realizado, ya puede realizar <strong> npm install </strong> en la carpeta <strong>API</strong>, para que se instalen todas las dependencias necesarias.
 
-## Enunciado
+Para poner en línea el servidor, ejecutar <strong>npm start</strong> .
 
-La idea general es crear una aplicación en la cual se puedan ver los distintos videojuegos disponibles junto con información relevante de los mismos utilizando la api externa [rawg](https://rawg.io/apidocs) y a partir de ella poder, entre otras cosas:
+### <u>Configurando el Front</u>
 
-  - Buscar videjuegos
-  - Filtrarlos / Ordenarlos
-  - Agregar nuevos videojuegos
+Para el front no se requieren de configuraciones adicionales. Ejecutar <strong>npm install</strong> en la carpeta <strong>Cliente</strong> y luego <strong>npm start</strong> para poner en línea el servidor web.
 
-__IMPORTANTE__: Para poder utilizar esta API externa es necesario crearse una cuenta para obtener una API Key que luego debera ser incluida en todos los request que hagamos a rawg simplemente agregando `?key={YOUR_API_KEY}` al final de cada endpoint. Agregar la clave en el archivo `.env` para que la misma no se suba al repositorio por cuestiones de seguridad y utilizarla desde allí.
+<br />
 
-__IMPORTANTE__: Para las funcionalidades de filtrado y ordenamiento NO pueden utilizar los endpoints de la API externa que ya devuelven los resultados filtrados u ordenados sino que deben realizarlo ustedes mismos. En particular alguno de los ordenamientos o filtrados debe si o si realizarse desde el frontend.
+## Presentación y funcionalidades
 
-### Únicos Endpoints/Flags que pueden utilizar
+### <u>Home</u>
 
-  - GET https://api.rawg.io/api/games
-  - GET https://api.rawg.io/api/games?search={game}
-  - GET https://api.rawg.io/api/genres
-  - GET https://api.rawg.io/api/games/{id}
+<img  style="border-radius: 5px;" src="./imgs/home.gif"/>
 
-### Requerimientos mínimos:
+Pantalla principal de la app. Se muestran los primeros 100 resultados que devuelve la api externa, junto con los primeros 100 videogames que se encuentren en la base de datos. Incluye una navbar con una barra de búsqueda y un botón que redirige a la web de creación de un videogame. También, una barra lateral, con la posibilidad de aplicar filtros, tanto a los resultados por default, como a los resultados de la búsqueda.
 
-A continuación se detallaran los requerimientos mínimos para la aprobación del proyecto individial. Aquellos que deseen agregar más funcionalidades podrán hacerlo. En cuanto al diseño visual no va a haber wireframes ni prototipos prefijados sino que tendrán libertad de hacerlo a su gusto pero tienen que aplicar los conocimientos de estilos vistos en el curso para que quede agradable a la vista.
+<br />
 
-__IMPORTANTE__: No se permitirá utilizar librerías externas para aplicar estilos a la aplicación. Tendrán que utilizar CSS con algunas de las opciones que vimos en dicha clase (CSS puro, CSS Modules o Styled Components)
+### <u>Create</u>
 
-#### Tecnologías necesarias:
-- [ ] React
-- [ ] Redux
-- [ ] Express
-- [ ] Sequelize - Postgres
+<img  style="border-radius: 5px;" src="./imgs/Create.gif"/>
 
-#### Frontend
+Pantalla de creación de un videogame. Un formulario controlado, en donde los campos Name, Description, Genres y Platforms son requeridos, el resto de campos no son obligatorios. Luego de la creación, sale un pequeño Popup indicando el resultado de la creación.
 
-Se debe desarrollar una aplicación de React/Redux que contenga las siguientes pantallas/rutas.
+<br />
 
-__Pagina inicial__: deben armar una landing page con
-- [ ] Alguna imagen de fondo representativa al proyecto
-- [ ] Botón para ingresar al home (`Ruta principal`)
+### <u>Game detail</u>
 
-__Ruta principal__: debe contener
-- [ ] Input de búsqueda para encontrar videojuegos por nombre
-- [ ] Área donde se verá el listado de videojuegos. Deberá mostrar su:
-  - Imagen
-  - Nombre
-  - Géneros
-- [ ] Botones/Opciones para filtrar por género y por videojuego existente o agregado por nosotros
-- [ ] Botones/Opciones para ordenar tanto ascendentemente como descendentemente los videojuegos por orden alfabético y por rating
-- [ ] Paginado para ir buscando y mostrando los siguientes videojuegos, 15 juegos por pagina, mostrando los primeros 15 en la primer pagina.
+<img  style="border-radius: 5px;" src="./imgs/Detail.gif"/>
 
-__IMPORTANTE__: Dentro de la Ruta Principal se deben mostrar tanto los videjuegos traidos desde la API como así también los de la base de datos. Debido a que en la API existen alrededor de 500 mil juegos, por cuestiones de performance pueden tomar la simplificación de obtener y paginar los primeras 100.
+Pantalla de detalle de un videogame. Se muestran más detalles que en la pantalla principal, como la descripción del mismo, la foto en mayor resolución, fecha de lanzamiento y otros datos.
 
-__Ruta de detalle de videojuego__: debe contener
-- [ ] Los campos mostrados en la ruta principal para cada videojuegos (imagen, nombre, y géneros)
-- [ ] Descripción
-- [ ] Fecha de lanzamiento
-- [ ] Rating
-- [ ] Plataformas
+<br />
 
-__Ruta de creación de videojuegos__: debe contener
-- [ ] Un formulario __controlado__ con los siguientes campos
-  - Nombre
-  - Descripción
-  - Fecha de lanzamiento
-  - Rating
-- [ ] Posibilidad de seleccionar/agregar varios géneros
-- [ ] Posibilidad de seleccionar/agregar varias plataformas
-- [ ] Botón/Opción para crear un nuevo videojuego
+### <u>Search</u>
 
-#### Base de datos
+<img  style="border-radius: 5px;" src="./imgs/search.gif"/>
 
-El modelo de la base de datos deberá tener las siguientes entidades (Aquellas propiedades marcadas con asterísco deben ser obligatorias):
+Funcionalidad de búsqueda. Devuelve los primeros 15 resultados que contengan el nombre buscado. Los 15 resultados devueltos incluyen aquellos juegos que se encuentren en la DB, ej, si se busca la palabra "Fifa", va a buscar 15 resultados en la api, 15 resultados en la DB, y el resultado final, será la unión de esos 15 resultados ordenados alfabéticamente. Se pueden aplicar los filtros a la búsqueda. Para reiniciar, se puede utilizar el botón reset.
 
-- [ ] Videojuego con las siguientes propiedades:
-  - ID: * No puede ser un ID de un videojuego ya existente en la API rawg
-  - Nombre *
-  - Descripción *
-  - Fecha de lanzamiento
-  - Rating
-  - Plataformas *
-- [ ] Genero con las siguientes propiedades:
-  - ID
-  - Nombre
+<br />
 
-La relación entre ambas entidades debe ser de muchos a muchos ya que un videojuego puede pertenecer a varios géneros en simultaneo y, a su vez, un género puede contener múltiples videojuegos distintos. Un ejemplo sería el juego `Counter Strike` pertenece a los géneros Shooter y Action al mismo tiempo. Pero a su vez existen otros videojuegos considerados como Shooter o como Action.
+### <u>Filters</u>
 
-__IMPORTANTE__: Pensar como modelar los IDs de los videojuegos en la base de datos. Existen distintas formas correctas de hacerlo pero tener en cuenta que cuando hagamos click en algun videojuego, este puede provenir de la API o de la Base de Datos por lo que cuando muestre su detalle no debería haber ambigüedad en cual se debería mostrar. Por ejemplo si en la API el videojuego `Age of Empires II: Age of Kings` tiene id = 1 y en nuestra base de datos creamos un nuevo videojuego `Age of Henry` con id = 1, ver la forma de diferenciarlos cuando querramos acceder al detalle del mismo.
+<img  style="border-radius: 5px;" src="./imgs/filters.gif"/>
 
-#### Backend
+Funcionalidad de filtros. Se puede filtrar por Género de videogame, por pertenencia (DB o API), y aplicar un ordenamiento, sea Alfabético (A-Z o Z-A) o por Rating.
 
-Se debe desarrollar un servidor en Node/Express con las siguientes rutas:
+<br />
 
-__IMPORTANTE__: No está permitido utilizar los filtrados, ordenamientos y paginados brindados por la API externa, todas estas funcionalidades tienen que implementarlas ustedes.
+### <u>Pages</u>
 
-- [ ] __GET /videogames__:
-  - Obtener un listado de los videojuegos
-  - Debe devolver solo los datos necesarios para la ruta principal
-- [ ] __GET /videogames?name="..."__:
-  - Obtener un listado de las primeros 15 videojuegos que contengan la palabra ingresada como query parameter
-  - Si no existe ningún videojuego mostrar un mensaje adecuado
-- [ ] __GET /videogame/{idVideogame}__:
-  - Obtener el detalle de un videojuego en particular
-  - Debe traer solo los datos pedidos en la ruta de detalle de videojuego
-  - Incluir los géneros asociados
-- [ ] __GET /genres__:
-  - Obtener todos los tipos de géneros de videojuegos posibles
-  - En una primera instancia deberán traerlos desde rawg y guardarlos en su propia base de datos y luego ya utilizarlos desde allí
-- [ ] __POST /videogame__:
-  - Recibe los datos recolectados desde el formulario controlado de la ruta de creación de videojuego por body
-  - Crea un videojuego en la base de datos
+<img  style="border-radius: 5px;" src="./imgs/pages.gif"/>
 
-
-#### Testing
-- [ ] Al menos tener un componente del frontend con sus tests respectivos
-- [ ] Al menos tener una ruta del backend con sus tests respectivos
-- [ ] Al menos tener un modelo de la base de datos con sus tests respectivos
+Funcionalidad de paginado. Es posible avanzar por páginas, tanto para mostrar todos los resultados, como para mostrar los filtros. La cantidad de juegos por páginas es de 15.
