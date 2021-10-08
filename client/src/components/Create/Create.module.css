@@ -8,6 +8,7 @@
     ". . .";
   background-color: black;
   min-height: 100vh;
+  overflow: scroll;
 }
 
 .popup {

@@ -1,11 +1,12 @@
 import React from "react";
 import s from "./Selected.module.css";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 function Selected({ list, items, setItems }) {
   const [showList, setShowList] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [filterList, setFilterList] = useState(list);
+  const selectRef = useRef(null);
 
   const onClickList = (e) => {
     setShowList((prev) => !prev);
@@ -53,7 +54,7 @@ function Selected({ list, items, setItems }) {
   };
 
   return (
-    <div className={s.container}>
+    <div ref={selectRef} className={s.container}>
       <div className={s.bar}>
         {!items.length && "Select..."}
         {items.length
@@ -85,7 +86,16 @@ function Selected({ list, items, setItems }) {
         </div>
       </div>
       {showList && filterList.length ? (
-        <div className={s.list}>
+        <div
+          style={{
+            top: `${
+              selectRef.current
+                ? `${10 + selectRef.current.clientHeight}px`
+                : "50px"
+            }`,
+          }}
+          className={s.list}
+        >
           {filterList.map((elem, i) => (
             <span
               key={`${elem}_${i * elem.length}`}
