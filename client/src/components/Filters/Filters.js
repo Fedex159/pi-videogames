@@ -8,11 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSearchState, filterReset } from "../../actions";
 import { getGenresFromDB } from "../../utils/utils";
 
-function Filters() {
+function Filters({ setShowFilters }) {
   const [genres, setGenres] = useState([]);
   const filterActive = useSelector((state) => state.filterActive);
   const searchState = useSelector((state) => state.searchState);
   const dispatch = useDispatch();
+  const [click, setClick] = useState(false);
 
   const [menu, setMenu] = useState({
     Genres: false,
@@ -24,6 +25,11 @@ function Filters() {
       const response = await getGenresFromDB();
       setGenres(() => response);
     })();
+    setMenu(() => ({
+      Genres: Boolean(filterActive.genres),
+      From: Boolean(filterActive.from),
+      Order: Boolean(filterActive.order),
+    }));
     // eslint-disable-next-line
   }, []);
 
@@ -55,8 +61,18 @@ function Filters() {
       });
     }
   };
+  const onClickHide = () => {
+    setClick(() => true);
+    setTimeout(() => {
+      setShowFilters(() => false);
+    }, 200);
+  };
+
   return (
-    <div className={s.container}>
+    <div className={`${s.container} ${click ? s.filterHide : s.filterShow}`}>
+      <div onClick={onClickHide} className={s.btnHide}>
+        Hide filters ↩
+      </div>
       <div className={s.genres}>
         <h3 onClick={handleClick} name="Genres">
           Genres

@@ -104,3 +104,11 @@ Funcionalidad de filtros. Se puede filtrar por Género de videogame, por pertene
 <img  style="border-radius: 5px;" src="./imgs/pages.gif"/>
 
 Funcionalidad de paginado. Es posible avanzar por páginas, tanto para mostrar todos los resultados, como para mostrar los filtros. La cantidad de juegos por páginas es de 15.
+
+<br />
+
+### <u>Responsive</u>
+
+<img  style="border-radius: 5px;" src="./imgs/responsive.gif"/>
+
+La web esta configurada para funcionar responsivamente.

@@ -79,9 +79,9 @@ function Selected({ list, items, setItems }) {
             name="selected"
           />
           <div className={s.btnClean}>
-            <button onClick={onClickClean}>x</button>
+            <button onClick={onClickClean}>×</button>
             <span> |</span>
-            <button onClick={onClickList}>▼</button>
+            <button onClick={onClickList}>∨</button>
           </div>
         </div>
       </div>

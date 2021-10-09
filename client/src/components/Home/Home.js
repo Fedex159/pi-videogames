@@ -7,7 +7,7 @@ import Loading from "../Loading/Loading";
 import NotGame from "../NotGame/NotGame";
 import s from "./Home.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getGames,
   filterReset,
@@ -21,6 +21,7 @@ function Home() {
   const pages = useSelector((state) => state.gamesPage);
   const page = useSelector((state) => state.page);
   const dispatch = useDispatch();
+  const [showFilters, setShowFilters] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -38,12 +39,32 @@ function Home() {
     // eslint-disable-next-line
   }, []);
 
+  const onClick = () => {
+    if (!loading) {
+      setShowFilters((prev) => !prev);
+    }
+  };
+
   return (
     <div className={s.container}>
       <div className={s.navbar}>
         <NavBar />
       </div>
-      <div className={s.filters}>{loading ? null : <Filters />}</div>
+      {
+        <div
+          style={{ zIndex: `${showFilters ? "2" : "0"}` }}
+          className={s.filters}
+        >
+          {loading || !showFilters ? null : (
+            <Filters setShowFilters={setShowFilters} />
+          )}
+          {showFilters ? null : (
+            <button className={s.btn} onClick={onClick}>
+              Show filters ↪
+            </button>
+          )}
+        </div>
+      }
       <div className={s.games}>
         {loading ? <Loading /> : <Games />}
         {!pages.length && !loading && <NotGame />}
