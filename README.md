@@ -69,7 +69,7 @@ Pantalla principal de la app. Se muestran los primeros 100 resultados que devuel
 
 ### <u>Create</u>
 
-<img  style="border-radius: 5px;" src="./imgs/Create.gif"/>
+<img  style="border-radius: 5px;" src="./imgs/create.gif"/>
 
 Pantalla de creación de un videogame. Un formulario controlado, en donde los campos Name, Description, Genres y Platforms son requeridos, el resto de campos no son obligatorios. Luego de la creación, sale un pequeño Popup indicando el resultado de la creación.
 
