@@ -52,7 +52,13 @@ function Home() {
       </div>
       {
         <div
-          style={{ zIndex: `${showFilters ? "2" : "0"}` }}
+          style={{
+            zIndex: `${showFilters ? "2" : "0"}`,
+            borderRight: `${
+              showFilters ? "none" : "1px solid rgba(128, 128, 128, 0.18)"
+            }`,
+            backgroundColor: `${showFilters ? "transparent" : "#e8e423"}`,
+          }}
           className={s.filters}
         >
           {loading || !showFilters ? null : (
