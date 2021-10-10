@@ -65,7 +65,7 @@ function Filters({ setShowFilters }) {
     setClick(() => true);
     setTimeout(() => {
       setShowFilters(() => false);
-    }, 200);
+    }, 190);
   };
 
   return (
