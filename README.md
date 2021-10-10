@@ -77,7 +77,7 @@ Pantalla de creación de un videogame. Un formulario controlado, en donde los ca
 
 ### <u>Game detail</u>
 
-<img  style="border-radius: 5px;" src="./imgs/Detail.gif"/>
+<img  style="border-radius: 5px;" src="./imgs/detail.gif"/>
 
 Pantalla de detalle de un videogame. Se muestran más detalles que en la pantalla principal, como la descripción del mismo, la foto en mayor resolución, fecha de lanzamiento y otros datos.
 
