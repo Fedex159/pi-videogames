@@ -19,11 +19,13 @@ router.get("/", async (req, res) => {
   try {
     if (!name) {
       // const gamesAPI = await gamesFromAPI(TOTAL, PAGE_SIZE);
-      const gamesDB = await gamesFromDB(name, ATTRIBUTES);
+      const gamesDB = await gamesFromDB(null, ATTRIBUTES);
       const gamesAPI = await gamesFromAPI();
       res.json(gamesDB.concat(gamesAPI));
-    } else {
+    } else if (!/^\s+/gi.test(name)) {
       res.json(await gamesWithQuery(decodeURI(name), ATTRIBUTES));
+    } else {
+      res.json({});
     }
   } catch (e) {
     res.sendStatus(404);

@@ -30,13 +30,12 @@ function NavBar() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const name = e.target.search.value;
-    if (name && !loading && !errors.value) {
+    if (value && !loading && !errors.value) {
       dispatch(setLoading(true));
-      dispatch(await searchGame(name));
+      dispatch(await searchGame(value));
       dispatch(setFilterActive({ genres: "", from: "", order: "" }));
       dispatch(setLoading(false));
-      e.target.search.value = "";
+      setValue(() => "");
     }
   };
 
