@@ -10,17 +10,17 @@ const {
 const { loadGame } = require("../utils/utils_loads");
 const { validateParams, validateUUID } = require("../utils/utils_validate");
 
-// const TOTAL = 100;
-// const PAGE_SIZE = 20;
+const TOTAL = 100;
+const PAGE_SIZE = 20;
 const ATTRIBUTES = ["id", "name", "image", "rating"];
 
 router.get("/", async (req, res) => {
   const { name } = req.query;
   try {
     if (!name) {
-      // const gamesAPI = await gamesFromAPI(TOTAL, PAGE_SIZE);
+      const gamesAPI = await gamesFromAPI(TOTAL, PAGE_SIZE);
       const gamesDB = await gamesFromDB(null, ATTRIBUTES);
-      const gamesAPI = await gamesFromAPI();
+      // const gamesAPI = await gamesFromAPI();
       res.json(gamesDB.concat(gamesAPI));
     } else if (!/^\s+/gi.test(name)) {
       res.json(await gamesWithQuery(decodeURI(name), ATTRIBUTES));
