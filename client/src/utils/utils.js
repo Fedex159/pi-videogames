@@ -107,7 +107,7 @@ export function handleClickFilters(
 
 export async function getGameDetails(id) {
   try {
-    const response = await axios.get(`http://localhost:3001/videogames/${id}`);
+    const response = await axios.get(`/videogames/${id}`);
     return response.data;
   } catch (e) {
     console.log("Error getGameDetails", e);
@@ -117,7 +117,7 @@ export async function getGameDetails(id) {
 
 export async function getPlatforms() {
   try {
-    const response = await axios.get("http://localhost:3001/platforms");
+    const response = await axios.get("/platforms");
     return [...response.data].sort((a, b) => {
       return orderStr(a.name, b.name);
     });
@@ -129,7 +129,7 @@ export async function getPlatforms() {
 
 export async function getGenresFromDB() {
   try {
-    const response = await axios.get("http://localhost:3001/genres");
+    const response = await axios.get("/genres");
     return [...response.data].sort((a, b) => {
       return orderStr(a.name, b.name);
     });
@@ -195,10 +195,7 @@ export function validateInputs(input, inputG, inputP) {
 export async function addVideogame(body) {
   if (Object.keys(body).length) {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/videogames",
-        body
-      );
+      const response = await axios.post("/videogames", body);
       return response.data;
     } catch (e) {
       console.log("Error addVideogame", e);

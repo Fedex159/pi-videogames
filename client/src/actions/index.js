@@ -13,7 +13,7 @@ export const RESET_STATE = "ResetState";
 
 export const getGames = async () => {
   try {
-    const response = await axios.get("http://localhost:3001/videogames");
+    const response = await axios.get("/videogames");
     return {
       type: GET_GAMES,
       payload: response.data,
@@ -59,9 +59,7 @@ export const setPage = (payload) => {
 
 export const searchGame = async (name) => {
   try {
-    const response = await axios.get(
-      `http://localhost:3001/videogames?name=${name}`
-    );
+    const response = await axios.get(`/videogames?name=${name}`);
     return {
       type: SEARCH_GAME,
       payload: response.data,
